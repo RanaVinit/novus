@@ -51,13 +51,14 @@ function App() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       {/* navbar */}
+
       <Navbar brand="Novus" /> 
 
-      <h1 className="text-xl text-white mt-5 flex justify-center">Latest blogs</h1>
+      <h1 className="text-xl text-black mt-5 flex justify-center">Latest blogs</h1>
 
       {/* main-feed */}
-      <main className="flex-grow w-full flex justify-center">
-        <div className="flex-grow w-full px-21 py-15">
+      <main className="grow w-full flex justify-center">
+        <div className="grow w-full px-21 py-15">
           <Feed blogs={blogs} />
         </div>
       </main>
