@@ -7,64 +7,57 @@ function App() {
     {
       title: "The Coffee That Started My Morning Routine",
       author: "Ananya Sharma",
-      content:
-        "It began with one cup of black coffee before sunrise. Now it’s a ritual that defines my day",
+      image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93",
+      description: "It began with one cup of black coffee..."
     },
     {
       title: "Why Night Walks Boost Creativity",
       author: "Ethan Miller",
-      content:
-        "When the city sleeps, your brain connects dots it couldn’t in the noise. Some of my best ideas have come under a dim streetlight, not at my desk.",
+      image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
+      description: "When the city sleeps..."
     },
     {
       title: "Building Systems, Not Goals",
       author: "Noor",
-      content:
-        "Goals are temporary; systems last. Instead of aiming to write a book, build the habit of writing 200 words every morning — the book will write itself.",
+      image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
+      description: "Goals are temporary..."
     },
     {
-      title: "Minimalism Isn’t About Owning Less",
-      author: "Riya Patel",
-      content:
-        "It’s not about having fewer things; it’s about removing distractions that stop you from focusing on what actually matters.",
+      title: "The Coffee That Started My Morning Routine",
+      author: "Ananya Sharma",
+      image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93",
+      description: "It began with one cup of black coffee..."
     },
     {
-      title: "How Music Helps Me Code Better",
-      author: "Vinit Rana",
-      content:
-        "It’s not lo-fi or synthwave that helps — it’s rhythm. Repetitive beats keep me in flow. It’s not about escaping noise, it’s about controlling it.",
+      title: "Why Night Walks Boost Creativity",
+      author: "Ethan Miller",
+      image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
+      description: "When the city sleeps..."
     },
     {
-      title: "The Art of Doing Nothing",
-      author: "Oliver Brooks",
-      content:
-        "We glorify productivity, but stillness is underrated. Sitting quietly for ten minutes a day can clear mental cache better than any meditation app.",
+      title: "Building Systems, Not Goals",
+      author: "Noor",
+      image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
+      description: "Goals are temporary..."
     },
-    {
-      title: "Learning to Cook Taught Me Patience",
-      author: "Sana Kapoor",
-      content:
-        "Cooking isn’t about recipes, it’s about rhythm. You can’t rush onions turning golden — and that’s the best metaphor for personal growth I’ve found.",
-    }
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="pt-20 flex flex-col min-h-screen bg-white"> {/**As navbar h=70px added pt-20 padding*/}
       {/* navbar */}
-
       <Navbar brand="Novus" /> 
 
-      <h1 className="text-xl text-black mt-5 flex justify-center">Latest blogs</h1>
 
       {/* main-feed */}
-      <main className="grow w-full flex justify-center">
-        <div className="grow w-full px-21 py-15">
+      <h1 className="ml-12 mb-4 mt-8 text-l font-semibold px-4"> For you </h1>
+
+      <main className="w-full flex ml-3 px-7">
           <Feed blogs={blogs} />
-        </div>
       </main>
 
       {/* footer */}
-      <Footer year="2025" name="Novus" />
+      <Footer year="2025" name="Novus"></Footer>
+
     </div>
   );
 }

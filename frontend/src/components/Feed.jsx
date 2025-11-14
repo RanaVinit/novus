@@ -3,13 +3,14 @@ import BlogCard from "./BlogCard";
 function Feed({ blogs }) {
   console.log(blogs);
   return (
-    <div className="grid gap-17 justify-items-center" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+    <div className="grid gap-8">
       {blogs.map((blog, index) => (
         <BlogCard
           key={index}
           title={blog.title}
           author={blog.author}
-          content={blog.content}
+          image={blog.image}
+          description={blog.description}
         />
       ))}
     </div>

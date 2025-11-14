@@ -1,15 +1,20 @@
-function BlogCard({ title, author, content }) {
+function BlogCard({ title, author, image, description }) {
   return (
-    <div className="border p-5 rounded-xl shadow-sm bg-gray-100 space-y-2 h-75 w-65 flex flex-col justify-between">
-      <div>
-        <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
-        <p className="text-sm text-gray-500">by {author}</p>
-        <p className="text-gray-700 text-sm mt-2">{content}</p>
+    // blog component
+    <div className="w-[95%] mx-auto border rounded-xl p-5 flex justify-between cursor-pointer">
+
+      {/* left section */}
+      <div className="w-[85%]">
+        <p className="text-xs text-gray-500 mb-2">{author}</p>
+
+        <h4 className="font-bold text-2xl mb-2">{title}</h4>
+
+        <p className="text-gray-600 line-clamp-3">{description}</p>
       </div>
 
-      <button className="bg-black text-white text-sm px-3 py-1 rounded">
-        Read More
-      </button>
+      {/* right section [img] */}
+      <img src={image} alt={title} className="w-[200px] h-[130px] rounded-lg object-cover"/>
+
     </div>
   );
 }
