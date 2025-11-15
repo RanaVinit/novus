@@ -8,7 +8,7 @@ html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: "Inter", sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 @theme inline {
