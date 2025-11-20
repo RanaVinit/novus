@@ -18,7 +18,7 @@ export default function BlogCard({ title, author, image, description, id}) {
       <div className="p-5 flex flex-col gap-2 h-full">
         
         {/* first middle section */}
-        <div className="flex-grow">
+        <div className="grow">
           {/* Title */}
           <h2 className="text-lg font-semibold leading-snug tracking-tight">
             {title}

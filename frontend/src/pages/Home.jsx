@@ -10,22 +10,21 @@ import MediumFeaturedCard from "@/components/MediumFeaturedCard";
 
 export default function Home() {
   return (
-    <div className="pt-24"> 
+    <div className="pt-24">
       <Navbar />
 
       {/* Hero text */}
       <div className="text-center px-4">
         {/* <h4 className="text-sm bg-gray-100 rounded-full inline-block px-3 py-1 text-gray-700">Our Blogs</h4> */}
-        
+
         <h1 className="text-3xl md:text-4xl font-bold leading-tight md:leading-snug tracking-tight">
           Insights and Inspiration, <br />
           Explore Our Blog
         </h1>
-        
+
         <p className="text-gray-600 text-lg leading-relaxed max-w-xl mx-auto mt-3">
           Dive into expert insights, tips, and trends to elevate your journey.
         </p>
-
       </div>
 
       <SearchBar />
@@ -53,15 +52,14 @@ export default function Home() {
         </h2>
 
         <p className="text-gray-600 max-w-xl mx-auto mt-2 text-sm md:text-base leading-relaxed">
-          Discover popular articles curated to help you grow, learn, and stay inspired.
+          Discover popular articles curated to help you grow, learn, and stay
+          inspired.
         </p>
       </div>
 
       {/* Featured Section */}
       <div className="max-w-6xl mx-auto mt-20 px-4">
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-
           {/* left card */}
           <BigFeaturedCard blog={blogs[0]} />
 
@@ -71,7 +69,6 @@ export default function Home() {
             <SmallFeaturedCard blog={blogs[2]} />
             <MediumFeaturedCard blog={blogs[3]} />
           </div>
-
         </div>
       </div>
 
