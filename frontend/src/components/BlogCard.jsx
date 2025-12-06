@@ -1,55 +1,87 @@
-import { useState } from "react";
-import { HandHeart } from 'lucide-react';
-import { MessageCircle } from 'lucide-react';
+import { memo, useState } from "react";
+import { HandHeart, MessageCircle } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
+import { optimizeImageUrl, generateSrcSet } from "../lib/imageOptimizer";
 
-export default function BlogCard({ title, author, image, description, id}) {
-  const [likes, setlikes] = useState(0);
-  const [comments, setcomments] = useState(0);
+function BlogCard({ title, author, image, description, id }) {
+  const navigate = useNavigate();
+  const [likes, setLikes] = useState(0);
+  const [comments, setComments] = useState(0);
+
+  const handleCardClick = () => {
+    navigate(`/blog/${id}`);
+  };
+
+  const handleLike = (e) => {
+    e.stopPropagation();
+    setLikes(likes + 1);
+  };
+
+  const handleComment = (e) => {
+    e.stopPropagation();
+    setComments(comments + 1);
+  };
+
+  const optimizedImage = optimizeImageUrl(image, 364, 60);
+  const srcSet = generateSrcSet(image, false);
 
   return (
-    <div className="bg-white rounded-2xl shadow hover:shadow-lg transition cursor-pointer flex flex-col" onClick={() => window.location.href = `/blog/${id}`}>
-      
-      {/* Image */}
-      <div className="w-full h-48 p-1">
-        <img src={image} alt={title} className="w-full h-full object-cover rounded-2xl"/>
+    <div 
+      className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer flex flex-col h-full overflow-hidden"
+      onClick={handleCardClick}
+      role="article"
+    >
+      {/* Image Container */}
+      <div className="w-full aspect-16/10 bg-gray-100 overflow-hidden">
+        <img 
+          src={optimizedImage}
+          srcSet={srcSet}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          alt={title} 
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
+          width="364"
+          height="228"
+        />
       </div>
 
-      {/* middle section */}
-      <div className="p-5 flex flex-col gap-2 h-full">
+      {/* Content Section */}
+      <div className="p-5 flex flex-col gap-3 flex-1">
         
-        {/* first middle section */}
-        <div className="grow">
-          {/* Title */}
-          <h2 className="text-lg font-semibold leading-snug tracking-tight">
+        {/* Title & Description */}
+        <div className="flex-1">
+          <h3 className="text-base font-semibold leading-snug tracking-tight text-gray-900 mb-2">
             {title}
-          </h2>
-
-          {/* Description */}
-          <p className="text-sm text-gray-600 leading-relaxed line-clamp-3"> {description} </p>
+          </h3>
+          <p className="text-sm text-gray-600 leading-relaxed line-clamp-2">
+            {description}
+          </p>
         </div>
 
-        {/* last middle section */}
-        <div className="flex justify-between items-center pt-2 text-xs text-gray-500">
-          <span>{author}</span>
-          <div>
-            {/* Like Button */}
-            <button onClick={(e) => { 
-                e.stopPropagation();
-                setlikes(likes + 1);
-              }}
-              className="inline-flex items-center gap-1 mr-2 cursor-pointer hover:text-red-500 transition">
-                <HandHeart size={17} className="opacity-80" />
-                {likes}
+        {/* Footer: Author & Actions */}
+        <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+          <span className="text-xs font-medium text-gray-500">
+            {author}
+          </span>
+          
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={handleLike}
+              className="inline-flex items-center gap-1.5 px-2 py-1 rounded hover:bg-red-50 transition-colors duration-150"
+              aria-label="Like this article"
+            >
+              <HandHeart size={16} className="text-gray-500 hover:text-red-500" />
+              <span className="text-xs text-gray-600 font-medium">{likes}</span>
             </button>
 
-            {/* Comment Button */}
-            <button onClick={(e) => {
-                e.stopPropagation();
-                setcomments(comments + 1);
-              }}
-              className="inline-flex items-center gap-1 cursor-pointer hover:text-blue-500 transition">
-              <MessageCircle size={16} className="opacity-80" />
-              {comments}
+            <button 
+              onClick={handleComment}
+              className="inline-flex items-center gap-1.5 px-2 py-1 rounded hover:bg-blue-50 transition-colors duration-150"
+              aria-label="Comment on this article"
+            >
+              <MessageCircle size={16} className="text-gray-500 hover:text-blue-500" />
+              <span className="text-xs text-gray-600 font-medium">{comments}</span>
             </button>
           </div>
         </div>
@@ -58,3 +90,5 @@ export default function BlogCard({ title, author, image, description, id}) {
     </div>
   );
 }
+
+export default memo(BlogCard);

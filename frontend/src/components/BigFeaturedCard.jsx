@@ -1,22 +1,44 @@
-export default function BigFeaturedCard({ blog }) {
+import React, { memo } from "react";
+import { useNavigate } from "react-router-dom";
+import { optimizeImageUrl, generateSrcSet } from "../lib/imageOptimizer";
+
+function BigFeaturedCard({ blog }) {
+  const navigate = useNavigate();
+  
+  const optimizedImage = optimizeImageUrl(blog.image, 600, 65);
+  const srcSet = generateSrcSet(blog.image, true);
+
   return (
-    <div className="cursor-pointer bg-gray-100 rounded-3xl hover:shadow-lg transition overflow-hidden" onClick={() => window.location.href = `/blog/${blog.id}`}>
+    <div
+      className="cursor-pointer bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden"
+      onClick={() => navigate(`/blog/${blog.id}`)}
+      role="article"
+    >
+      <div className="aspect-16/10 bg-gray-100 overflow-hidden">
+        <img
+          src={optimizedImage}
+          srcSet={srcSet}
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 600px"
+          alt={blog.title}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
+          width="600"
+          height="375"
+        />
+      </div>
 
-      <div className="p-5 flex flex-col gap-3">
-        {/* top */}
-        <h2 className="text-xl font-semibold leading-snug tracking-tight"> {blog.title} </h2>
-        <p className="text-gray-600 text-sm leading-relaxed line-clamp-3"> {blog.description} </p>
-        
-        {/* middle */}
-        <img src={blog.image} alt={blog.title} className="w-full h-90 object-cover rounded-3xl p-1"/>
-
-        {/* last */}
-        <div className="flex justify-between items-center text-xs text-gray-500 pt-2">
-          <span>{blog.author}</span>
-          <span className="hover:underline">Read More →</span>
-        </div>
-
+      <div className="p-6">
+        <h3 className="text-xl font-semibold leading-snug mb-3 line-clamp-2">
+          {blog.title}
+        </h3>
+        <p className="text-sm text-gray-600 line-clamp-3 mb-4">
+          {blog.description}
+        </p>
+        <span className="text-xs text-gray-500">{blog.author}</span>
       </div>
     </div>
   );
 }
+
+export default memo(BigFeaturedCard);
