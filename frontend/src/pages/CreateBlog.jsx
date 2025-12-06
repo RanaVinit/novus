@@ -19,7 +19,7 @@ const CreateBlog = () => {
 
   return (
     <div className="pt-24">
-      <Navbar showPublish={true} hideNav={true} />
+      <Navbar showPublish={true} isLoggedIn={true} />
 
       {/* <h1 className="text-center text-3xl font-semibold mb-10">
         Create a New Blog
