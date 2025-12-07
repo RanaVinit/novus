@@ -1,35 +1,38 @@
 import React, { useState, useRef } from "react";
 import Navbar from "../components/Navbar";
-import { Upload } from "lucide-react";
+import { Upload, X } from "lucide-react";
 
 const CreateBlog = () => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
+  const [category, setCategory] = useState("General");
+  const [image, setImage] = useState(null);
   const fileInputRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    console.log("Blog:", { title, desc });
-
-    alert("Blog created");
+    alert("Blog created:)");
     setTitle("");
     setDesc("");
+    setCategory("General");
+    setImage(null);
+  };
+
+  // When user uploads an image
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setImage(URL.createObjectURL(file));
   };
 
   return (
     <div className="pt-24">
       <Navbar showPublish={true} isLoggedIn={true} />
 
-      {/* <h1 className="text-center text-3xl font-semibold mb-10">
-        Create a New Blog
-      </h1> */}
-
-      {/* Form */}
       <form
         id="createBlogForm"
         onSubmit={handleSubmit}
-        className="max-w-2xl mx-auto flex flex-col gap-6 mt-6.5"
+        className="max-w-2xl mx-auto flex flex-col gap-5 mt-10 px-4"
       >
         {/* Title */}
         <input
@@ -38,40 +41,70 @@ const CreateBlog = () => {
           required
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="text-2xl font-medium p-2 outline-none border-b border-gray-300 focus:border-black transition w-full"
+          className="text-2xl p-2 outline-none border-b border-gray-300 focus:border-black transition"
         />
 
         {/* Description */}
         <textarea
-          placeholder="Tell your Story..."
+          placeholder="Tell your story..."
           required
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
-          className="p-2 outline-none border-b border-gray-300 focus:border-black transition w-full h-36 resize-none"
+          className="outline-none border-b border-gray-300 focus:border-black transition w-full h-36 resize-none p-2"
         ></textarea>
 
-        {/* Upload Image Button */}
-        <div className="flex justify-start">
-          <div className="relative group inline-block">
-            <Upload
-              className="w-8 h-8 text-gray-700 cursor-pointer"
-              onClick={() => fileInputRef.current?.click()}
-            />
+        {/* Category dropdown */}
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="p-2 border-b outline-none w-40 bg-transparent text-gray-700"
+        >
+          <option>General</option>
+          <option>Technology</option>
+          <option>Lifestyle</option>
+          <option>Business</option>
+          <option>Design</option>
+        </select>
 
-            <span
-              className="absolute left-1/2 -translate-x-1/2 mt-2 px-3 py-1 text-xs 
-                  bg-black text-white rounded shadow
-                  opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100 
-                  transition-all duration-150"
+        {/* Image Upload */}
+        <div className="flex flex-col gap-3">
+          <label className="font-medium">Cover Image</label>
+
+          {/* If image selected → show preview */}
+          {image ? (
+            <div className="relative w-full">
+              <img
+                src={image}
+                alt="Preview"
+                className="w-full h-60 object-cover rounded-md border"
+              />
+
+              {/* Remove image */}
+              <button
+                type="button"
+                onClick={() => setImage(null)}
+                className="absolute top-2 right-2 bg-black/70 text-white p-1 rounded-full"
+              >
+                <X size={16} />
+              </button>
+            </div>
+          ) : (
+            // Upload Button
+            <div
+              onClick={() => fileInputRef.current.click()}
+              className="border border-dashed border-gray-400 rounded-md h-24 flex items-center justify-center cursor-pointer hover:bg-gray-100 transition"
             >
-              Upload Image
-            </span>
-          </div>
+              <Upload size={24} className="text-gray-700" />
+              <span className="ml-2 text-gray-600">Upload Image</span>
+            </div>
+          )}
 
+          {/* Hidden File Input */}
           <input
             type="file"
             ref={fileInputRef}
             accept="image/*"
+            onChange={handleImageChange}
             className="hidden"
           />
         </div>
