@@ -5,8 +5,8 @@ import { optimizeImageUrl, generateSrcSet } from "../lib/imageOptimizer";
 function MediumFeaturedCard({ blog }) {
   const navigate = useNavigate();
 
-  const optimizedImage = optimizeImageUrl(blog.image, 500, 75);
-  const srcSet = generateSrcSet(blog.image);
+  const optimizedImage = optimizeImageUrl(blog.image, 500, 60);
+  const srcSet = generateSrcSet(blog.image, false);
 
   return (
     <div
@@ -14,7 +14,7 @@ function MediumFeaturedCard({ blog }) {
       onClick={() => navigate(`/blog/${blog.id}`)}
       role="article"
     >
-      <div className="aspect-video bg-gray-100 overflow-hidden">
+      <div className="h-32 bg-gray-100 overflow-hidden">
         <img
           src={optimizedImage}
           srcSet={srcSet}
@@ -28,15 +28,14 @@ function MediumFeaturedCard({ blog }) {
         />
       </div>
 
-      <h3 className="text-base font-semibold leading-snug mb-1.5">
-        {" "}
-        {blog.title}{" "}
-      </h3>
-      <p className="text-xs text-gray-500 line-clamp-2 mb-2.5">
-        {" "}
-        {blog.description}{" "}
-      </p>
-      <span className="text-xs text-gray-400">{blog.author}</span>
+      <div className="p-5">
+        <h3 className="text-lg font-semibold leading-snug mb-2 line-clamp-2">
+          {blog.title}
+        </h3>
+        <p className="text-sm text-gray-600 line-clamp-2">
+          {blog.description}
+        </p>
+      </div>
     </div>
   );
 }
