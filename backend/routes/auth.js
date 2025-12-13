@@ -3,6 +3,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
+import auth from "../middleware/auth.js";
+
 const router = express.Router();
 
 // Signup
@@ -78,5 +80,13 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+// testing
+router.get("/me", auth, (req, res) => {
+  res.json({
+    message : "You are authorized",
+    user: req.user
+  });
+})
 
 export default router;
