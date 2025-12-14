@@ -27,7 +27,7 @@ router.get("/", auth, async (req, res) => {
 router.get("/:id", auth, async (req, res) => {
   try {
     const article = await Article.findById(req.params.id);
-    
+
     if (!article) {
       return res.status(404).json({ message: "Article not found" });
     }
@@ -58,7 +58,6 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
-
 /**
  * @route  DELETE /api/articles/:id
  * @desc   Delete an article by ID
@@ -80,6 +79,36 @@ router.delete("/:id", auth, async (req, res) => {
     res.status(200).json({ message: "Article deleted successfully" });
   } catch (err) {
     res.status(500).json(err);
+  }
+});
+
+/*
+@route PUT /api/articles/:id
+@desc Update an article by ID
+@access Private
+*/
+router.put("/:id", auth, async (req, res) => {
+  try {
+    const articleId = req.params.id;
+    const article = await Article.findById(articleId);
+
+    if (!article) {
+      return res.status(404).json({ message: "Article not found" });
+    }
+
+    if (article.author.toString() !== req.user.userId) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    article.title = req.body.title || article.title;
+    article.description = req.body.description || article.description;
+    article.image = req.body.image || article.image;
+
+    await article.save();
+
+    res.status(200).json(article);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 });
 
