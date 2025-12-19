@@ -9,7 +9,7 @@ const router = express.Router();
  * @desc   Get all articles
  * @access Private
  */
-router.get("/", auth, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const articles = await Article.find().
     populate("author", "name").

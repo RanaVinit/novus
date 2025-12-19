@@ -5,13 +5,18 @@ import { optimizeImageUrl, generateSrcSet } from "../lib/imageOptimizer";
 function SmallFeaturedCard({ blog }) {
   const navigate = useNavigate();
 
-  const optimizedImage = optimizeImageUrl(blog.image, 256, 60);
-  const srcSet = generateSrcSet(blog.image, false);
+  if (!blog) return null;
+
+  const postId = blog.id || blog._id;
+  const image = blog.image || "/placeholder.jpg";
+
+  const optimizedImage = optimizeImageUrl(image, 256, 60);
+  const srcSet = generateSrcSet(image, false);
 
   return (
     <div
       className="cursor-pointer bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 flex gap-4 p-4"
-      onClick={() => navigate(`/blog/${blog.id}`)}
+      onClick={() => postId && navigate(`/blog/${postId}`)}
       role="article"
     >
       <img
@@ -33,7 +38,7 @@ function SmallFeaturedCard({ blog }) {
         <p className="text-xs text-gray-500 line-clamp-2 mb-auto">
           {blog.description}
         </p>
-        <span className="text-xs text-gray-400 truncate">{blog.author}</span>
+        <span className="text-xs text-gray-400 truncate">{blog.author?.name}</span>
       </div>
     </div>
   );

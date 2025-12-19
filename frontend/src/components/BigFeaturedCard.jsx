@@ -4,14 +4,18 @@ import { optimizeImageUrl, generateSrcSet } from "../lib/imageOptimizer";
 
 function BigFeaturedCard({ blog }) {
   const navigate = useNavigate();
-  
-  const optimizedImage = optimizeImageUrl(blog.image, 600, 65);
-  const srcSet = generateSrcSet(blog.image, true);
+
+  if (!blog) return null;
+
+  const postId = blog.id || blog._id;
+  const image = blog.image || "/placeholder.jpg";
+  const optimizedImage = optimizeImageUrl(image, 600, 65);
+  const srcSet = generateSrcSet(image, true);
 
   return (
     <div
       className="cursor-pointer bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden"
-      onClick={() => navigate(`/blog/${blog.id}`)}
+      onClick={() => postId && navigate(`/blog/${postId}`)}
       role="article"
     >
       <div className="aspect-16/10 bg-gray-100 overflow-hidden">
@@ -35,7 +39,7 @@ function BigFeaturedCard({ blog }) {
         <p className="text-sm text-gray-600 line-clamp-3 mb-4">
           {blog.description}
         </p>
-        <span className="text-xs text-gray-500">{blog.author}</span>
+        <span className="text-xs text-gray-500">{blog.author?.name}</span>
       </div>
     </div>
   );

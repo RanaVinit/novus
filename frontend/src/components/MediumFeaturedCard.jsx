@@ -5,13 +5,18 @@ import { optimizeImageUrl, generateSrcSet } from "../lib/imageOptimizer";
 function MediumFeaturedCard({ blog }) {
   const navigate = useNavigate();
 
-  const optimizedImage = optimizeImageUrl(blog.image, 500, 60);
-  const srcSet = generateSrcSet(blog.image, false);
+  if (!blog) return null;
+
+  const postId = blog.id || blog._id;
+  const image = blog.image || "/placeholder.jpg";
+
+  const optimizedImage = optimizeImageUrl(image, 500, 60);
+  const srcSet = generateSrcSet(image, false);
 
   return (
     <div
       className="cursor-pointer bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden"
-      onClick={() => navigate(`/blog/${blog.id}`)}
+      onClick={() => postId && navigate(`/blog/${postId}`)}
       role="article"
     >
       <div className="h-32 bg-gray-100 overflow-hidden">

@@ -3,13 +3,19 @@ import { HandHeart, MessageCircle } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 import { optimizeImageUrl, generateSrcSet } from "../lib/imageOptimizer";
 
-function BlogCard({ title, author, image, description, id }) {
+function BlogCard({ title, author, image, description, id, _id }) {
   const navigate = useNavigate();
   const [likes, setLikes] = useState(0);
   const [comments, setComments] = useState(0);
 
+  const postId = id || _id;
+  const authorName = typeof author === "string" ? author : author?.name;
+  const safeImage = image || "/placeholder.jpg";
+
   const handleCardClick = () => {
-    navigate(`/blog/${id}`);
+    if (postId) {
+      navigate(`/blog/${postId}`);
+    }
   };
 
   const handleLike = (e) => {
@@ -22,8 +28,8 @@ function BlogCard({ title, author, image, description, id }) {
     setComments(comments + 1);
   };
 
-  const optimizedImage = optimizeImageUrl(image, 364, 60);
-  const srcSet = generateSrcSet(image, false);
+  const optimizedImage = optimizeImageUrl(safeImage, 364, 60);
+  const srcSet = generateSrcSet(safeImage, false);
 
   return (
     <div 
@@ -33,7 +39,7 @@ function BlogCard({ title, author, image, description, id }) {
     >
       {/* Image Container */}
       <div className="w-full aspect-16/10 bg-gray-100 overflow-hidden">
-        <img 
+        {safeImage && <img 
           src={optimizedImage}
           srcSet={srcSet}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -43,7 +49,7 @@ function BlogCard({ title, author, image, description, id }) {
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
           width="364"
           height="228"
-        />
+        />}
       </div>
 
       {/* Content Section */}
@@ -62,7 +68,7 @@ function BlogCard({ title, author, image, description, id }) {
         {/* Footer: Author & Actions */}
         <div className="flex items-center justify-between pt-3 border-t border-gray-100">
           <span className="text-xs font-medium text-gray-500">
-            {author}
+            {authorName}
           </span>
           
           <div className="flex items-center gap-4">
