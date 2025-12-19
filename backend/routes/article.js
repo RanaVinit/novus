@@ -11,7 +11,9 @@ const router = express.Router();
  */
 router.get("/", auth, async (req, res) => {
   try {
-    const articles = await Article.find().sort({ createdAt: -1 });
+    const articles = await Article.find().
+    populate("author", "name").
+    sort({ createdAt: -1 });
 
     res.json(articles);
   } catch (err) {
@@ -26,7 +28,8 @@ router.get("/", auth, async (req, res) => {
  */
 router.get("/:id", auth, async (req, res) => {
   try {
-    const article = await Article.findById(req.params.id);
+    const article = await Article.findById(req.params.id).
+    populate("author", "name");
 
     if (!article) {
       return res.status(404).json({ message: "Article not found" });
@@ -34,7 +37,7 @@ router.get("/:id", auth, async (req, res) => {
 
     res.status(200).json(article);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(400).json(err);
   }
 });
 
