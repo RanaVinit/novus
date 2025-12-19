@@ -2,7 +2,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import SearchBar from "../components/SearchBar";
 import CategoryTag from "../components/CategoryTag";
-import BlogCard from "../components/BlogCard";
+import BlogCard from "../components/ArticleCard";
 import BigFeaturedCard from "../components/BigFeaturedCard";
 import SmallFeaturedCard from "../components/SmallFeaturedCard";
 import MediumFeaturedCard from "@/components/MediumFeaturedCard";
@@ -46,9 +46,9 @@ export default function Home() {
     }
   }, [featuredBlogs.length]);
 
-  // fetch fetchBlogs from backend API
+  // fetch articles from backend API
   useEffect(() => {
-    const fetchBlogs = async () => {
+    const fetchArticles = async () => {
       try {
         const token = localStorage.getItem("token");
 
@@ -89,7 +89,7 @@ export default function Home() {
       }
     };
 
-    fetchBlogs();
+    fetchArticles();
   }, []);
 
   if (loading) {
