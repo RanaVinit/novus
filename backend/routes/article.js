@@ -1,6 +1,6 @@
 import express from "express";
-import auth from "../middleware/auth.js";
 import Article from "../models/Article.js";
+import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -9,13 +9,16 @@ const router = express.Router();
  * @desc   Get all articles
  * @access Private
  */
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
-    const articles = await Article.find().
-    populate("author", "name").
-    sort({ createdAt: -1 });
+    const limit = 10;
 
-    res.json(articles);
+    const articles = await Article.find()
+      .populate("author", "name")
+      .sort({ createdAt: -1 })
+      .limit(limit);
+
+    res.status(200).json(articles);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -28,12 +31,12 @@ router.get("/", async (req, res) => {
  */
 router.get("/:id", auth, async (req, res) => {
   try {
-    const article = await Article.findById(req.params.id).
-    populate("author", "name");
+    const article = await Article.findById(req.params.id).populate(
+      "author",
+      "name"
+    );
 
-    if (!article) {
-      return res.status(404).json({ message: "Article not found" });
-    }
+    if (!article) return res.status(404).json({ message: "Article not found" });
 
     res.status(200).json(article);
   } catch (err) {

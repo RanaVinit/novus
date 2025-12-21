@@ -7,16 +7,13 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      {/* Navbar */}
       <Navbar
         onLoginClick={() => setAuthType("login")}
         isLoggedIn={false}
         hideNav={true}
       />
 
-      {/* Main Section */}
       <div className="flex flex-col md:flex-row items-center justify-center grow px-8 py-12 gap-10">
-        {/* Text */}
         <div className="max-w-xl text-center md:text-left">
           <h1 className="text-5xl md:text-6xl font-extrabold leading-tight tracking-tight">
             A fresh way to
@@ -35,7 +32,6 @@ export default function Landing() {
           </button>
         </div>
 
-        {/* Hero Image */}
         <div className="w-full md:w-[450px]">
           <img
             src="https://images.unsplash.com/photo-1494173853739-c21f58b16055?w=800"
@@ -45,7 +41,6 @@ export default function Landing() {
         </div>
       </div>
 
-      {/* Auth Modal */}
       {authType && (
         <AuthModal
           type={authType}
