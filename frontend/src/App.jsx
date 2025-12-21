@@ -3,8 +3,8 @@ import { Routes, Route } from "react-router-dom";
 
 const Landing = lazy(() => import("./pages/Landing"));
 const HomeFeed = lazy(() => import("./pages/HomeFeed"));
-const BlogDetails = lazy(() => import("./pages/BlogDetails"));
-const CreateBlog = lazy(() => import("./pages/CreateBlog"));
+const ArticleDetails = lazy(() => import("./pages/ArticleDetails"));
+const CreateArticle = lazy(() => import("./pages/CreateArticle"));
 
 export default function App() {
   return (
@@ -16,8 +16,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/home" element={<HomeFeed />} />
-        <Route path="/blog/:id" element={<BlogDetails />} />
-        <Route path="/create-blog" element={<CreateBlog />} />
+        <Route path="/article/:id" element={<ArticleDetails />} />
+        <Route path="/create-article" element={<CreateArticle />} />
       </Routes>
     </Suspense>
   );

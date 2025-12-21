@@ -3,7 +3,7 @@ import { HandHeart, MessageCircle } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 import { optimizeImageUrl, generateSrcSet } from "../lib/imageOptimizer";
 
-function BlogCard({ title, author, image, description, id, _id }) {
+function ArticleCard({ title, author, image, description, id, _id }) {
   const navigate = useNavigate();
   const [likes, setLikes] = useState(0);
   const [comments, setComments] = useState(0);
@@ -14,7 +14,7 @@ function BlogCard({ title, author, image, description, id, _id }) {
 
   const handleCardClick = () => {
     if (postId) {
-      navigate(`/blog/${postId}`);
+      navigate(`/article/${postId}`);
     }
   };
 
@@ -97,4 +97,4 @@ function BlogCard({ title, author, image, description, id, _id }) {
   );
 }
 
-export default memo(BlogCard);
+export default memo(ArticleCard);

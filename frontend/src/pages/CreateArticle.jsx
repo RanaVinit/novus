@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import Navbar from "../components/Navbar";
 import { Upload, X } from "lucide-react";
 
-const CreateBlog = () => {
+const CreateArticle = () => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [category, setCategory] = useState("General");
@@ -11,7 +11,7 @@ const CreateBlog = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Blog created:)");
+    alert("Article created:)");
     setTitle("");
     setDesc("");
     setCategory("General");
@@ -30,7 +30,7 @@ const CreateBlog = () => {
       <Navbar showPublish={true} isLoggedIn={true} />
 
       <form
-        id="createBlogForm"
+        id="createArticleForm"
         onSubmit={handleSubmit}
         className="max-w-2xl mx-auto flex flex-col gap-5 mt-10 px-4"
       >
@@ -113,4 +113,4 @@ const CreateBlog = () => {
   );
 };
 
-export default CreateBlog;
+export default CreateArticle;

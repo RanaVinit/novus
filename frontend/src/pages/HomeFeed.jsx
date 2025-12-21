@@ -2,7 +2,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import SearchBar from "../components/SearchBar";
 import CategoryTag from "../components/CategoryTag";
-import BlogCard from "../components/ArticleCard";
+import ArticleCard from "../components/ArticleCard";
 import BigFeaturedCard from "../components/BigFeaturedCard";
 import SmallFeaturedCard from "../components/SmallFeaturedCard";
 import MediumFeaturedCard from "@/components/MediumFeaturedCard";
@@ -12,14 +12,14 @@ const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 const PLACEHOLDER_IMG = "/placeholder.jpg";
 
 export default function Home() {
-  const [blogs, setBlogs] = useState([]);
+  const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const [showFeatured, setShowFeatured] = useState(false);
   const featuredRef = useRef(null);
-  const featuredBlogs = useMemo(() => blogs.slice(0, 4), [blogs]);
-  const hasFeaturedSet = featuredBlogs.length >= 4;
+  const featuredArticles = useMemo(() => articles.slice(0, 4), [articles]);
+  const hasFeaturedSet = featuredArticles.length >= 4;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -41,10 +41,10 @@ export default function Home() {
 
   // Ensure featured section appears once data is loaded
   useEffect(() => {
-    if (featuredBlogs.length >= 4) {
+    if (featuredArticles.length >= 4) {
       setShowFeatured(true);
     }
-  }, [featuredBlogs.length]);
+  }, [featuredArticles.length]);
 
   // fetch articles from backend API
   useEffect(() => {
@@ -81,7 +81,7 @@ export default function Home() {
           createdAt: article.createdAt,
         }));
 
-        setBlogs(normalized);
+        setArticles(normalized);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -100,9 +100,10 @@ export default function Home() {
     return <p className="text-center mt-20">{error}</p>;
   }
 
+  const isLoggedIn = Boolean(localStorage.getItem("token"));
   return (
     <div className="pt-24">
-      <Navbar isLoggedIn={true} />
+      <Navbar isLoggedIn={isLoggedIn} />
 
       {/* Search */}
       <div className="mt-4 px-4 max-w-4xl mx-auto">
@@ -125,8 +126,8 @@ export default function Home() {
 
       {/* Feed Grid */}
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-10 px-4 mt-10">
-        {blogs.map((b, index) => (
-          <BlogCard key={b._id} {...b} priority={index < 3} />
+        {articles.map((a, index) => (
+          <ArticleCard key={a._id} {...a} priority={index < 3} />
         ))}
       </div>
 
@@ -146,11 +147,11 @@ export default function Home() {
 
           <div className="max-w-6xl mx-auto mt-14 px-4 pb-5">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-              <BigFeaturedCard blog={featuredBlogs[0]} />
+              <BigFeaturedCard article={featuredArticles[0]} />
               <div className="flex flex-col gap-6">
-                <SmallFeaturedCard blog={featuredBlogs[1]} />
-                <SmallFeaturedCard blog={featuredBlogs[2]} />
-                <MediumFeaturedCard blog={featuredBlogs[3]} />
+                <SmallFeaturedCard article={featuredArticles[1]} />
+                <SmallFeaturedCard article={featuredArticles[2]} />
+                <MediumFeaturedCard article={featuredArticles[3]} />
               </div>
             </div>
           </div>

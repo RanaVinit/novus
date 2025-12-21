@@ -2,13 +2,13 @@ import React, { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { optimizeImageUrl, generateSrcSet } from "../lib/imageOptimizer";
 
-function MediumFeaturedCard({ blog }) {
+function MediumFeaturedCard({ article }) {
   const navigate = useNavigate();
 
-  if (!blog) return null;
+  if (!article) return null;
 
-  const postId = blog.id || blog._id;
-  const image = blog.image || "/placeholder.jpg";
+  const postId = article.id || article._id;
+  const image = article.image || "/placeholder.jpg";
 
   const optimizedImage = optimizeImageUrl(image, 500, 60);
   const srcSet = generateSrcSet(image, false);
@@ -16,7 +16,7 @@ function MediumFeaturedCard({ blog }) {
   return (
     <div
       className="cursor-pointer bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden"
-      onClick={() => postId && navigate(`/blog/${postId}`)}
+      onClick={() => postId && navigate(`/article/${postId}`)}
       role="article"
     >
       <div className="h-32 bg-gray-100 overflow-hidden">
@@ -24,7 +24,7 @@ function MediumFeaturedCard({ blog }) {
           src={optimizedImage}
           srcSet={srcSet}
           sizes="(max-width: 768px) 100vw, 500px"
-          alt={blog.title}
+          alt={article.title}
           loading="lazy"
           decoding="async"
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
@@ -35,10 +35,10 @@ function MediumFeaturedCard({ blog }) {
 
       <div className="p-5">
         <h3 className="text-lg font-semibold leading-snug mb-2 line-clamp-2">
-          {blog.title}
+          {article.title}
         </h3>
         <p className="text-sm text-gray-600 line-clamp-2">
-          {blog.description}
+          {article.description}
         </p>
       </div>
     </div>
