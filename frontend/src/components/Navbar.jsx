@@ -7,6 +7,7 @@ function Navbar({
   onLoginClick,
   isLoggedIn,
   hideNav = false,
+  isSubmitting = false,
 }) {
   // Prefer consumer-provided isLoggedIn, otherwise derive from stored token
   const loggedIn = typeof isLoggedIn === "boolean" ? isLoggedIn : Boolean(localStorage.getItem("token"));
@@ -37,9 +38,12 @@ function Navbar({
           <button
             type="submit"
             form="createArticleForm"
-            className="bg-green-700 text-white px-4 py-2 rounded-xl hover:bg-green-800 transition"
+            disabled={isSubmitting}
+            className={`bg-green-700 text-white px-4 py-2 rounded-xl transition ${
+              isSubmitting ? "opacity-60 cursor-not-allowed" : "hover:bg-green-800"
+            }`}
           >
-            Publish
+            {isSubmitting ? "Publishing..." : "Publish"}
           </button>
         ) : (
           loggedIn && (
