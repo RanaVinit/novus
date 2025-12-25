@@ -106,9 +106,11 @@ router.put("/:id", auth, async (req, res) => {
       return res.status(403).json({ message: "Not authorized" });
     }
 
-    article.title = req.body.title || article.title;
-    article.description = req.body.description || article.description;
-    article.image = req.body.image || article.image;
+    article.title = req.body.title ?? article.title;
+    article.content = req.body.content ?? article.content;
+    article.thumbnail = req.body.thumbnail ?? article.thumbnail;
+    article.category = req.body.category ?? article.category;
+    article.tags = Array.isArray(req.body.tags) ? req.body.tags : article.tags;
 
     await article.save();
 
