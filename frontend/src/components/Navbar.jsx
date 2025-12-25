@@ -1,38 +1,41 @@
 import { SquarePen } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import React, { memo } from "react";
+import SearchBar from "./SearchBar";
 
 function Navbar({
   showPublish = false,
   onLoginClick,
   isLoggedIn,
-  hideNav = false,
   isSubmitting = false,
 }) {
-  // Prefer consumer-provided isLoggedIn, otherwise derive from stored token
-  const loggedIn = typeof isLoggedIn === "boolean" ? isLoggedIn : Boolean(localStorage.getItem("token"));
+  const loggedIn =
+    typeof isLoggedIn === "boolean"
+      ? isLoggedIn
+      : Boolean(localStorage.getItem("token"));
   const handleLoginClick = () => {
     if (typeof onLoginClick === "function") onLoginClick();
   };
+  const { pathname } = useLocation();
+  const isHome = pathname === "/home";
   return (
-    <nav className="w-full border-b bg-white px-6 py-4 flex justify-between items-center fixed top-0 left-0 z-50">
-      <Link to="/" className="text-2xl font-bold tracking-tight">
+    <nav className="w-full border-b bg-white px-6 py-4 flex items-center gap-6 fixed top-0 left-0 z-50">
+      <Link
+        to={loggedIn ? "/home" : "/"}
+        className="text-2xl font-bold tracking-tight"
+      >
         Novus
       </Link>
 
-      {/* Navigation menu */}
-      {!showPublish && !hideNav && (
-        <ul className="hidden md:flex gap-8 text-gray-700">
-          <Link to="/home" className="hover:text-black">
-            Home
-          </Link>
-          <li className="cursor-pointer hover:text-black">Articles</li>
-          <li className="cursor-pointer hover:text-black">Categories</li>
-        </ul>
+      {/* Search */}
+      {isHome && (
+        <div className="basis-1/4">
+          <SearchBar compact />
+        </div>
       )}
 
       {/* Right Side */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 ml-auto">
         {/* Show Publish button on create article page */}
         {showPublish ? (
           <button
@@ -40,7 +43,9 @@ function Navbar({
             form="createArticleForm"
             disabled={isSubmitting}
             className={`bg-green-700 text-white px-4 py-2 rounded-xl transition ${
-              isSubmitting ? "opacity-60 cursor-not-allowed" : "hover:bg-green-800"
+              isSubmitting
+                ? "opacity-60 cursor-not-allowed"
+                : "hover:bg-green-800"
             }`}
           >
             {isSubmitting ? "Publishing..." : "Publish"}
@@ -49,10 +54,10 @@ function Navbar({
           loggedIn && (
             <Link
               to="/create-article"
-              className="flex items-center bg-gray-100 px-4 py-2 rounded-xl hover:bg-gray-200 transition"
+              className="inline-flex items-center gap-2 mr-4 rounded-full"
             >
-              <SquarePen className="w-5 h-5 mr-2" />
-              Write
+              <SquarePen className="w-4 h-4 text-gray-600" />
+              <span className="font-medium">Write</span>
             </Link>
           )
         )}
