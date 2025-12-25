@@ -3,18 +3,17 @@ import { HandHeart, MessageCircle } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 import { optimizeImageUrl, generateSrcSet } from "../lib/imageOptimizer";
 
-function ArticleCard({ title, author, image, description, id, _id }) {
+function ArticleCard({ title, author, image, content, id }) {
   const navigate = useNavigate();
   const [likes, setLikes] = useState(0);
   const [comments, setComments] = useState(0);
 
-  const postId = id || _id;
   const authorName = typeof author === "string" ? author : author?.name;
   const safeImage = image || "/placeholder.jpg";
 
   const handleCardClick = () => {
-    if (postId) {
-      navigate(`/article/${postId}`);
+    if (id) {
+      navigate(`/article/${id}`);
     }
   };
 
@@ -61,7 +60,7 @@ function ArticleCard({ title, author, image, description, id, _id }) {
             {title}
           </h3>
           <p className="text-sm text-gray-600 leading-relaxed line-clamp-2">
-            {description}
+            {content}
           </p>
         </div>
 

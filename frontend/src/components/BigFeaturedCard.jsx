@@ -7,7 +7,7 @@ function BigFeaturedCard({ article }) {
 
   if (!article) return null;
 
-  const postId = article.id || article._id;
+  const postId = article.id;
   const image = article.image || "/placeholder.jpg";
   const optimizedImage = optimizeImageUrl(image, 600, 65);
   const srcSet = generateSrcSet(image, true);
@@ -37,7 +37,7 @@ function BigFeaturedCard({ article }) {
           {article.title}
         </h3>
         <p className="text-sm text-gray-600 line-clamp-3 mb-4">
-          {article.description}
+          {article.content}
         </p>
         <span className="text-xs text-gray-500">{article.author?.name}</span>
       </div>

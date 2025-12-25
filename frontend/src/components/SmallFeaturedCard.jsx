@@ -7,7 +7,7 @@ function SmallFeaturedCard({ article }) {
 
   if (!article) return null;
 
-  const postId = article.id || article._id;
+  const postId = article.id;
   const image = article.image || "/placeholder.jpg";
 
   const optimizedImage = optimizeImageUrl(image, 256, 60);
@@ -36,7 +36,7 @@ function SmallFeaturedCard({ article }) {
           {article.title}
         </h3>
         <p className="text-xs text-gray-500 line-clamp-2 mb-auto">
-          {article.description}
+          {article.content}
         </p>
         <span className="text-xs text-gray-400 truncate">{article.author?.name}</span>
       </div>

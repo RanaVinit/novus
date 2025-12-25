@@ -7,7 +7,7 @@ function MediumFeaturedCard({ article }) {
 
   if (!article) return null;
 
-  const postId = article.id || article._id;
+  const postId = article.id;
   const image = article.image || "/placeholder.jpg";
 
   const optimizedImage = optimizeImageUrl(image, 500, 60);
@@ -38,7 +38,7 @@ function MediumFeaturedCard({ article }) {
           {article.title}
         </h3>
         <p className="text-sm text-gray-600 line-clamp-2">
-          {article.description}
+          {article.content}
         </p>
       </div>
     </div>
