@@ -1,6 +1,5 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import SearchBar from "../components/SearchBar";
 import CategoryTag from "../components/CategoryTag";
 import ArticleCard from "../components/ArticleCard";
 import BigFeaturedCard from "../components/BigFeaturedCard";
@@ -69,9 +68,8 @@ export default function Home() {
         const data = await res.json();
         const normalized = data.map((article) => ({
           id: article._id,
-          _id: article._id,
           title: article.title,
-          description: article.content,
+          content: article.content,
           image: article.thumbnail || PLACEHOLDER_IMG,
           author:
             typeof article.author === "string"
@@ -105,11 +103,6 @@ export default function Home() {
     <div className="pt-24">
       <Navbar isLoggedIn={isLoggedIn} />
 
-      {/* Search */}
-      <div className="mt-4 px-4 max-w-4xl mx-auto">
-        <SearchBar />
-      </div>
-
       {/* Categories */}
       <div className="flex justify-center gap-3 mt-6 flex-wrap">
         {[
@@ -127,7 +120,7 @@ export default function Home() {
       {/* Feed Grid */}
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-10 px-4 mt-10">
         {articles.map((a, index) => (
-          <ArticleCard key={a._id} {...a} priority={index < 3} />
+          <ArticleCard key={a.id} {...a} priority={index < 3} />
         ))}
       </div>
 

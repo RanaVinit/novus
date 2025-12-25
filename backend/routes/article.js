@@ -11,7 +11,7 @@ const router = express.Router();
  */
 router.get("/", auth, async (req, res) => {
   try {
-    const limit = 10;
+    const limit = 9;
 
     const articles = await Article.find()
       .populate("author", "name")
