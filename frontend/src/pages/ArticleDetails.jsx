@@ -67,7 +67,8 @@ export default function ArticleDetails() {
           },
         });
         if (!res.ok) return;
-        const list = await res.json();
+        const data = await res.json();
+        const list = data.articles || data;
         const normalizedList = list.map((a) => ({
           id: a._id,
           title: a.title,
