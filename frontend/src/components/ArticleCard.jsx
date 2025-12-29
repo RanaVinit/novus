@@ -32,7 +32,7 @@ function ArticleCard({ title, author, image, content, id }) {
 
   return (
     <div 
-      className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer flex flex-col h-full overflow-hidden"
+      className="bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col h-full overflow-hidden border border-gray-100 hover:border-gray-200"
       onClick={handleCardClick}
       role="article"
     >
@@ -45,18 +45,18 @@ function ArticleCard({ title, author, image, content, id }) {
           alt={title} 
           loading="lazy"
           decoding="async"
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
+          className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
           width="364"
           height="228"
         />}
       </div>
 
       {/* Content Section */}
-      <div className="p-5 flex flex-col gap-3 flex-1">
+      <div className="p-6 flex flex-col gap-3 flex-1">
         
         {/* Title & Description */}
         <div className="flex-1">
-          <h3 className="text-base font-semibold leading-snug tracking-tight text-gray-900 mb-2">
+          <h3 className="text-lg font-semibold leading-snug tracking-tight text-gray-900 mb-2 group-hover:text-black transition-colors">
             {title}
           </h3>
           <p className="text-sm text-gray-600 leading-relaxed line-clamp-2">
@@ -65,18 +65,18 @@ function ArticleCard({ title, author, image, content, id }) {
         </div>
 
         {/* Footer: Author & Actions */}
-        <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-          <span className="text-xs font-medium text-gray-500">
+        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+          <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
             {authorName}
           </span>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5">
             <button 
               onClick={handleLike}
-              className="inline-flex items-center gap-1.5 px-2 py-1 rounded hover:bg-red-50 transition-colors duration-150"
+              className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg hover:bg-red-50 transition-colors duration-150"
               aria-label="Like this article"
             >
-              <HandHeart size={16} className="text-gray-500 hover:text-red-500" />
+              <HandHeart size={16} className="text-gray-400 hover:text-red-500 transition-colors" />
               <span className="text-xs text-gray-600 font-medium">{likes}</span>
             </button>
 
