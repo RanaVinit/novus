@@ -12,13 +12,21 @@ const router = express.Router();
 router.get("/", auth, async (req, res) => {
   try {
     const limit = 9;
+    const skip = parseInt(req.query.skip) || 0;
 
     const articles = await Article.find()
       .populate("author", "name")
       .sort({ createdAt: -1 })
+      .skip(skip)
       .limit(limit);
 
-    res.status(200).json(articles);
+    const total = await Article.countDocuments();
+
+    res.status(200).json({
+      articles,
+      total,
+      hasMore: skip + limit < total,
+    });
   } catch (err) {
     res.status(500).json(err);
   }
