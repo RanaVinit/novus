@@ -8,19 +8,15 @@ import articleRoutes from "./routes/article.js";
 // Load the environment variables from .env file.
 dotenv.config();
 
-// Initialize the express app!
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Middlewares to parse JSON data and set headers
 app.use(express.json());
-app.use(cors()); // Enable CORS for all routes
+app.use(cors());
 
-// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/articles", articleRoutes);
 
-// We listen on the port
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
