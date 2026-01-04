@@ -19,12 +19,13 @@ function Navbar({
   const { pathname } = useLocation();
   const isHome = pathname === "/home";
   return (
-    <nav className="w-full border-b bg-white px-6 py-4 flex items-center gap-6 fixed top-0 left-0 z-50">
+    <nav className="w-full border-b border-gray-100 bg-white/80 backdrop-blur-md px-6 py-4 flex items-center gap-6 fixed top-0 left-0 z-50 transition-all duration-300">
+
       <Link
         to={loggedIn ? "/home" : "/"}
-        className="text-2xl font-bold tracking-tight"
+        className="text-2xl font-hero-serif font-bold tracking-tight text-gray-900"
       >
-        Novus
+        Novus.
       </Link>
 
       {/* Search */}
@@ -42,11 +43,10 @@ function Navbar({
             type="submit"
             form="createArticleForm"
             disabled={isSubmitting}
-            className={`bg-green-700 text-white px-4 py-2 rounded-xl transition ${
-              isSubmitting
-                ? "opacity-60 cursor-not-allowed"
-                : "hover:bg-green-800"
-            }`}
+            className={`bg-green-700 text-white px-4 py-2 rounded-xl transition ${isSubmitting
+              ? "opacity-60 cursor-not-allowed"
+              : "hover:bg-green-800"
+              }`}
           >
             {isSubmitting ? "Publishing..." : "Publish"}
           </button>
