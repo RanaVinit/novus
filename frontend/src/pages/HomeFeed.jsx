@@ -57,6 +57,7 @@ export default function Home() {
           headers: {
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
+          credentials: "include",
         });
 
         if (!res.ok) {
@@ -79,6 +80,8 @@ export default function Home() {
               : article.author,
           category: article.category,
           createdAt: article.createdAt,
+          upvotes: article.upvotes,
+          upvotedBy: article.upvotedBy,
         }));
 
         if (skip === 0) {
