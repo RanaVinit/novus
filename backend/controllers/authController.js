@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import Article from "../models/Article.js";
 
 export const login = async (req, res) => {
     const { email, password } = req.body;
@@ -70,6 +71,21 @@ export const verifyToken = (req, res) => {
     res.status(200).json({ valid: true, user: req.user });
 };
 
-export const getDashboard = (req, res) => {
-    res.status(200).json({ message: "Dashboard", user: req.user });
+export const getDashboard = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.userId).select("-password");
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        const articles = await Article.find({ author: req.user.userId })
+            .sort({ createdAt: -1 });
+
+        res.status(200).json({
+            user,
+            articles,
+            totalArticles: articles.length
+        });
+    } catch (error) {
+        console.error("Dashboard error:", error);
+        res.status(500).json({ message: "Server error" });
+    }
 };
