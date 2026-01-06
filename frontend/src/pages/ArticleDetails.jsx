@@ -1,5 +1,5 @@
 import Navbar from "../components/Navbar";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { MetaBadge } from "../components/CategoryTag";
@@ -26,6 +26,7 @@ export default function ArticleDetails() {
           headers: {
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
+          credentials: "include",
         });
 
         if (!res.ok) {
@@ -65,6 +66,7 @@ export default function ArticleDetails() {
           headers: {
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
+          credentials: "include",
         });
         if (!res.ok) return;
         const data = await res.json();
@@ -143,7 +145,13 @@ export default function ArticleDetails() {
         </h1>
 
         <div className="flex items-center gap-3 text-sm mb-10">
-          <MetaBadge text={article.author?.name} />
+          {article.author?._id ? (
+            <Link to={`/profile/${article.author._id}`} className="hover:opacity-80 transition-opacity">
+              <MetaBadge text={article.author?.name} />
+            </Link>
+          ) : (
+            <MetaBadge text={article.author?.name} />
+          )}
           {displayDate && <MetaBadge text={displayDate} />}
         </div>
 
