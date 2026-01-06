@@ -74,11 +74,13 @@ function Navbar({
 
         {/* Avatar placeholder for logged-in users */}
         {loggedIn && !showPublish && (
-          <img
-            src="https://i.pravatar.cc/40"
-            className="w-9 h-9 rounded-full cursor-pointer"
-            alt="profile"
-          />
+          <Link to="/dashboard">
+            <img
+              src="https://i.pravatar.cc/40"
+              className="w-9 h-9 rounded-full cursor-pointer hover:ring-2 hover:ring-gray-200 transition"
+              alt="profile"
+            />
+          </Link>
         )}
       </div>
     </nav>
