@@ -7,9 +7,16 @@ export function MetaBadge({ icon, text }) {
   );
 }
 
-export default function CategoryTag({ label }) {
+export default function CategoryTag({ label, isActive, onClick }) {
   return (
-    <button className="px-5 py-2.5 bg-white border border-gray-200 rounded-full text-sm font-medium hover:border-black hover:shadow-md hover:bg-gray-50 transition-all duration-200 text-gray-700">
+    <button
+      onClick={onClick}
+      className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200
+        ${isActive
+          ? "bg-black text-white border-black shadow-md"
+          : "bg-white border border-gray-200 text-gray-700 hover:border-black hover:shadow-md hover:bg-gray-50"
+        }`}
+    >
       {label}
     </button>
   );

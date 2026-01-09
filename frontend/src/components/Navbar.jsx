@@ -8,6 +8,8 @@ function Navbar({
   onLoginClick,
   isLoggedIn,
   isSubmitting = false,
+  onSearch,
+  searchValue,
 }) {
   const loggedIn =
     typeof isLoggedIn === "boolean"
@@ -19,7 +21,7 @@ function Navbar({
   const { pathname } = useLocation();
   const isHome = pathname === "/home";
   return (
-    <nav className="w-full border-b border-gray-100 bg-white/80 backdrop-blur-md px-6 py-4 flex items-center gap-6 fixed top-0 left-0 z-50 transition-all duration-300">
+    <nav className="w-full border-b border-gray-100 bg-white px-6 py-3 flex items-center gap-6 fixed top-0 left-0 z-50 transition-all duration-300">
 
       <Link
         to={loggedIn ? "/home" : "/"}
@@ -30,8 +32,8 @@ function Navbar({
 
       {/* Search */}
       {isHome && (
-        <div className="basis-1/4">
-          <SearchBar compact />
+        <div className="w-60">
+          <SearchBar compact value={searchValue} onChange={onSearch} />
         </div>
       )}
 
@@ -57,7 +59,7 @@ function Navbar({
               className="inline-flex items-center gap-2 mr-4 rounded-full"
             >
               <SquarePen className="w-4 h-4 text-gray-600" />
-              <span className="font-medium">Write</span>
+              <span className="text-gray-600 font-medium">Write</span>
             </Link>
           )
         )}

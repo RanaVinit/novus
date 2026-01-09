@@ -1,9 +1,9 @@
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import CategoryTag from "../components/CategoryTag";
-import ArticleCard from "../components/ArticleCard";
-import BigFeaturedCard from "../components/BigFeaturedCard";
-import SmallFeaturedCard from "../components/SmallFeaturedCard";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import CategoryTag from "@/components/CategoryTag";
+import ArticleCard from "@/components/ArticleCard";
+import BigFeaturedCard from "@/components/BigFeaturedCard";
+import SmallFeaturedCard from "@/components/SmallFeaturedCard";
 import MediumFeaturedCard from "@/components/MediumFeaturedCard";
 import { useMemo, useState, useEffect, useRef } from "react";
 
@@ -18,10 +18,28 @@ export default function Home() {
   const [skip, setSkip] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
+  // Search and Filter State
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
   const [showFeatured, setShowFeatured] = useState(false);
   const featuredRef = useRef(null);
   const featuredArticles = useMemo(() => articles.slice(0, 4), [articles]);
   const hasFeaturedSet = featuredArticles.length >= 4;
+
+  // Debounce Search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setSkip(0);
+  }, [debouncedSearch, selectedCategory]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -53,7 +71,19 @@ export default function Home() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch(`${API_BASE}/api/articles?skip=${skip}`, {
+        const queryParams = new URLSearchParams({
+          skip: skip,
+          limit: 9,
+        });
+
+        if (debouncedSearch) queryParams.append("search", debouncedSearch);
+        if (selectedCategory && selectedCategory !== "All")
+          queryParams.append("category", selectedCategory);
+
+        // Shuffle for discovery if not searching
+        if (!debouncedSearch) queryParams.append("shuffle", "true");
+
+        const res = await fetch(`${API_BASE}/api/articles?${queryParams.toString()}`, {
           headers: {
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
@@ -99,15 +129,16 @@ export default function Home() {
       }
     };
 
+    setLoading(skip === 0);
     fetchArticles();
-  }, [skip]);
+  }, [skip, debouncedSearch, selectedCategory]);
 
   const handleLoadMore = () => {
     setLoadingMore(true);
     setSkip((prev) => prev + 9);
   };
 
-  if (loading) {
+  if (loading && skip === 0 && !articles.length) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-linear-to-b from-white via-gray-50 to-white">
         <div className="text-center">
@@ -133,11 +164,15 @@ export default function Home() {
 
   const isLoggedIn = Boolean(localStorage.getItem("token"));
   return (
-    <div className="pt-24 bg-linear-to-b from-white via-gray-50 to-white min-h-screen">
-      <Navbar isLoggedIn={isLoggedIn} />
+    <div className="pt-16 bg-linear-to-b from-white via-gray-50 to-white min-h-screen">
+      <Navbar
+        isLoggedIn={isLoggedIn}
+        searchValue={searchQuery}
+        onSearch={(e) => setSearchQuery(e.target.value)}
+      />
 
       {/* Categories*/}
-      <div className="max-w-6xl mx-auto px-4 pt-8">
+      <div className="max-w-6xl mx-auto px-4 pt-4">
         <div className="flex justify-center gap-2 flex-wrap mb-8">
           {[
             "All",
@@ -147,18 +182,29 @@ export default function Home() {
             "Business",
             "Strategy",
           ].map((cat) => (
-            <CategoryTag key={cat} label={cat} />
+            <CategoryTag
+              key={cat}
+              label={cat}
+              isActive={selectedCategory === cat}
+              onClick={() => setSelectedCategory(cat)}
+            />
           ))}
         </div>
       </div>
 
       {/* Feed Grid */}
       <div className="max-w-6xl mx-auto px-4 pb-8">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {articles.map((a, index) => (
-            <ArticleCard key={a.id} {...a} priority={index < 3} />
-          ))}
-        </div>
+        {articles.length > 0 ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {articles.map((a, index) => (
+              <ArticleCard key={a.id} {...a} priority={index < 3} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-20">
+            <p className="text-gray-500 text-lg">No articles found matching your criteria.</p>
+          </div>
+        )}
       </div>
 
       {/* Load More Button */}
