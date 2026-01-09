@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import Navbar from "../components/Navbar";
-import ArticleCard from "../components/ArticleCard";
-import { User, PenLine, LayoutDashboard } from "lucide-react";
+import Navbar from "@/components/Navbar";
+import ArticleCard from "@/components/ArticleCard";
+import { User, LayoutDashboard } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
@@ -73,7 +73,7 @@ export default function Dashboard() {
         <div className="min-h-screen bg-gray-50 pb-20">
             <Navbar isLoggedIn={true} />
 
-            <main className="pt-24 max-w-6xl mx-auto px-6">
+            <main className="pt-18 max-w-6xl mx-auto px-6">
                 {/* Header Section */}
                 <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6 mb-12">
                     <div className="flex items-center gap-6">

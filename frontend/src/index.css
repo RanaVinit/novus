@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&display=swap');
 
 @custom-variant dark (&:is(.dark *));
 
@@ -16,9 +16,9 @@ body,
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Serif utility for hero headings */
+/* Logo and Hero headings font */
 .font-hero-serif {
-  font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  font-family: 'Outfit', sans-serif;
 }
 
 @theme inline {
@@ -60,25 +60,30 @@ body,
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(0.985 0.001 106.423);
-  /* Soft off-white/warm gray */
-  --foreground: oklch(0.13 0.028 261.692);
+  /* Neutral Theme (No tint) */
+  --background: oklch(0.985 0 0);
+  /* Neutral Off-White */
+  --foreground: oklch(0.14 0.005 285);
+  /* Deep neutral gray text */
   --card: oklch(1 0 0);
+  /* Keep cards white for contrast */
   --card-foreground: oklch(0.13 0.028 261.692);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.13 0.028 261.692);
-  --primary: oklch(0.21 0.034 264.665);
+  --primary: oklch(0.13 0.028 261.692);
+  /* Darker primary */
   --primary-foreground: oklch(0.985 0.002 247.839);
-  --secondary: oklch(0.967 0.003 264.542);
+  --secondary: oklch(0.95 0.01 106.423);
+  /* Warm secondary */
   --secondary-foreground: oklch(0.21 0.034 264.665);
-  --muted: oklch(0.967 0.003 264.542);
+  --muted: oklch(0.95 0.01 106.423);
   --muted-foreground: oklch(0.551 0.027 264.364);
-  --accent: oklch(0.967 0.003 264.542);
+  --accent: oklch(0.95 0.01 106.423);
   --accent-foreground: oklch(0.21 0.034 264.665);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.928 0.006 264.531);
-  --input: oklch(0.928 0.006 264.531);
+  --border: oklch(0.9 0.01 106.423);
+  /* Warm border */
+  --input: oklch(0.9 0.01 106.423);
   --ring: oklch(0.707 0.022 261.325);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -98,7 +103,8 @@ body,
 .dark {
   --background: oklch(0.13 0.028 261.692);
   --foreground: oklch(0.985 0.002 247.839);
-  --card: oklch(0.21 0.034 264.665);
+  --card: oklch(0.18 0.03 260);
+  /* Slightly lighter dark card */
   --card-foreground: oklch(0.985 0.002 247.839);
   --popover: oklch(0.21 0.034 264.665);
   --popover-foreground: oklch(0.985 0.002 247.839);

@@ -1,7 +1,7 @@
-import { useState } from "react";
-import Navbar from "../components/Navbar";
-import AuthModal from "../components/AuthModal";
+import Navbar from "@/components/Navbar";
+import AuthModal from "@/components/AuthModal";
 import { ArrowRight, User } from "lucide-react";
+import { useState } from "react";
 
 export default function Landing() {
     const [authType, setAuthType] = useState(null);
