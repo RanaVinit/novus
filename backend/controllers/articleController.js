@@ -4,19 +4,60 @@ export const getAllArticles = async (req, res) => {
   try {
     const limit = 9;
     const skip = parseInt(req.query.skip) || 0;
+    const { search, category, shuffle } = req.query;
 
-    const articles = await Article.find()
-      .populate("author", "name")
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
+    const query = {};
 
-    const total = await Article.countDocuments();
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { content: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    if (category && category !== "All") {
+      query.category = category;
+    }
+
+    let articles;
+    let total;
+
+    if (shuffle === "true" && !search) {
+      // Randomized Discovery Mode
+      articles = await Article.aggregate([
+        { $match: query },
+        { $sample: { size: limit } },
+        {
+          $lookup: {
+            from: "users",
+            localField: "author",
+            foreignField: "_id",
+            as: "author",
+          },
+        },
+        { $unwind: "$author" },
+        {
+          $project: {
+            "author.password": 0,
+            "author.email": 0,
+          },
+        },
+      ]);
+      total = await Article.countDocuments(query);
+    } else {
+      // Standard Chronological Mode
+      articles = await Article.find(query)
+        .populate("author", "name")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit);
+      total = await Article.countDocuments(query);
+    }
 
     res.status(200).json({
       articles,
       total,
-      hasMore: skip + limit < total,
+      hasMore: shuffle === "true" ? true : skip + limit < total,
     });
   } catch (err) {
     res.status(500).json(err);
@@ -112,7 +153,7 @@ export const upvoteArticle = async (req, res) => {
     }
 
     article.upvotedBy.push(req.user.userId);
-    article.upvotes = article.upvotedBy.length; 
+    article.upvotes = (article.upvotes || 0) + 1;
 
     await article.save();
 
@@ -127,7 +168,7 @@ export const downvoteArticle = async (req, res) => {
     const article = await Article.findById(req.params.id);
     if (!article) return res.status(404).json({ message: "Article not found" });
 
-     // Initialize if undefined
+    // Initialize if undefined
     if (!article.upvotedBy) article.upvotedBy = [];
 
     if (!article.upvotedBy.includes(req.user.userId)) {
@@ -137,8 +178,8 @@ export const downvoteArticle = async (req, res) => {
     article.upvotedBy = article.upvotedBy.filter(
       (id) => id.toString() !== req.user.userId
     );
-    article.upvotes = article.upvotedBy.length; 
-    
+    article.upvotes = Math.max(0, (article.upvotes || 0) - 1);
+
     await article.save();
 
     res.status(200).json(article);
