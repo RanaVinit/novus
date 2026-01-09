@@ -50,6 +50,7 @@ const CreateArticle = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
+          credentials: "include",
           body: JSON.stringify({
             title: formData.title,
             content: formData.content,

@@ -28,6 +28,7 @@ export default function AuthModal({ type, onClose, switchType }) {
       const res = await fetch(`${API_BASE}/api/auth/${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(payload),
       });
 
@@ -95,7 +96,7 @@ export default function AuthModal({ type, onClose, switchType }) {
             className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
           />
 
-        {error && <div className="text-sm text-red-600" role="alert">{error}</div>}
+          {error && <div className="text-sm text-red-600" role="alert">{error}</div>}
 
           <button
             type="submit"
