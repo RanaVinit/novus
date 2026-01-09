@@ -70,7 +70,7 @@ export default function PublicProfile() {
         <div className="min-h-screen bg-gray-50 pb-20">
             <Navbar isLoggedIn={Boolean(localStorage.getItem("token"))} />
 
-            <main className="pt-24 max-w-6xl mx-auto px-6">
+            <main className="pt-18 max-w-6xl mx-auto px-6">
                 {/* Header Section */}
                 <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-6 mb-12">
                     <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
