@@ -54,6 +54,7 @@ function ArticleCard({ title, author, image, content, id, upvotes = 0, upvotedBy
     setComments(prev => prev + 1);
   };
 
+  const [imgError, setImgError] = useState(false);
   const optimizedImage = optimizeImageUrl(safeImage, 364, 60);
   const srcSet = generateSrcSet(safeImage, false);
 
@@ -64,18 +65,26 @@ function ArticleCard({ title, author, image, content, id, upvotes = 0, upvotedBy
       role="article"
     >
       {/* Image Container */}
-      <div className="w-full aspect-16/10 bg-gray-100 overflow-hidden">
-        {safeImage && <img
-          src={optimizedImage}
-          srcSet={srcSet}
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          alt={title}
-          loading="lazy"
-          decoding="async"
-          className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-          width="364"
-          height="228"
-        />}
+      <div className="w-full aspect-16/10 bg-gray-100 overflow-hidden relative">
+        {(!safeImage || imgError) ? (
+          <div className="w-full h-full flex flex-col items-center justify-center bg-linear-to-br from-gray-50 to-gray-200 text-gray-400 gap-2">
+            <HandHeart size={32} className="opacity-20" />
+            <span className="text-[10px] font-bold uppercase tracking-widest opacity-40">Novus Reader</span>
+          </div>
+        ) : (
+          <img
+            src={optimizedImage}
+            srcSet={srcSet}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            alt={title}
+            loading="lazy"
+            decoding="async"
+            onError={() => setImgError(true)}
+            className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+            width="364"
+            height="228"
+          />
+        )}
       </div>
 
       {/* Content Section */}
