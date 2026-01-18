@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { optimizeImageUrl, generateSrcSet } from "../lib/imageOptimizer";
 
 function MediumFeaturedCard({ article }) {
-  const [imgError, setImgError] = useState(false);
   const navigate = useNavigate();
 
   if (!article) return null;

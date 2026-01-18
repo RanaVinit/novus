@@ -55,7 +55,6 @@ function ArticleCard({ title, author, image, content, id, category, upvotes = 0,
     setComments(prev => prev + 1);
   };
 
-  const [imgError, setImgError] = useState(false);
   const optimizedImage = optimizeImageUrl(safeImage, 364, 60);
   const srcSet = generateSrcSet(safeImage, false);
 

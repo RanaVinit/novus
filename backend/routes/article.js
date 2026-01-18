@@ -4,7 +4,7 @@ import {
   getAllArticles,
   getArticleById,
   createArticle,
-  deleteArticle, 
+  deleteArticle,
   updateArticle,
   upvoteArticle,
   downvoteArticle,
@@ -17,14 +17,8 @@ const router = express.Router();
  * @desc   Get all articles
  * @access Private
  */
-router.get("/", auth, getAllArticles);
-
-/**
- * @route  GET /api/articles/:id
- * @desc   Get a single article by ID
- * @access Private
- */
-router.get("/:id", auth, getArticleById);
+router.get("/", getAllArticles);
+router.get("/:id", getArticleById);
 
 /**
  * @route  POST /api/articles

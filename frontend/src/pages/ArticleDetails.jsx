@@ -1,3 +1,9 @@
+import Navbar from "../components/Navbar";
+import { useNavigate, useParams, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
+import { MetaBadge } from "../components/CategoryTag";
+
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 const PLACEHOLDER_IMG = "";
 

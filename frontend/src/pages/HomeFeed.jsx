@@ -196,7 +196,8 @@ export default function Home() {
       <div className="max-w-6xl mx-auto px-4 pb-8">
         {articles.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {articles.slice(4).map((a, index) => (
+            {/* Show all articles in grid if a category is selected. Only skip for the 'All' featured view. */}
+            {(selectedCategory === "All" && hasFeaturedSet ? articles.slice(4) : articles).map((a, index) => (
               <ArticleCard key={a.id} {...a} priority={index < 3} />
             ))}
           </div>
@@ -233,7 +234,7 @@ export default function Home() {
       {/* Featured Section */}
       <div ref={featuredRef} className="h-px" />
 
-      {showFeatured && hasFeaturedSet && (
+      {selectedCategory === "All" && showFeatured && hasFeaturedSet && (
         <>
           <div className="max-w-6xl mx-auto mt-8 px-4 mb-12 text-center">
             <span className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Featured</span>

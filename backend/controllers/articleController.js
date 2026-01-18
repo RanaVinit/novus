@@ -22,42 +22,60 @@ export const getAllArticles = async (req, res) => {
     let articles;
     let total;
 
+    // We use aggregation to ensure we only get articles with valid authors
+    // This prevents "disappearing" articles caused by orphaned data
+    const pipeline = [
+      { $match: query },
+      {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      { $unwind: "$author" },
+      {
+        $project: {
+          "author.password": 0,
+          "author.email": 0,
+        },
+      },
+    ];
+
     if (shuffle === "true" && !search) {
-      // Randomized Discovery Mode
-      articles = await Article.aggregate([
+      pipeline.push({ $sample: { size: limit } });
+      articles = await Article.aggregate(pipeline);
+      // For shuffle, total is still useful for hasMore logic
+      total = await Article.countDocuments(query);
+    } else {
+      pipeline.push({ $sort: { createdAt: -1 } });
+      pipeline.push({ $skip: skip });
+      pipeline.push({ $limit: limit });
+      articles = await Article.aggregate(pipeline);
+
+      // Calculate total count of articles with valid authors for pagination
+      const countPipeline = [
         { $match: query },
-        { $sample: { size: limit } },
         {
           $lookup: {
             from: "users",
             localField: "author",
             foreignField: "_id",
-            as: "author",
+            as: "authorData",
           },
         },
-        { $unwind: "$author" },
-        {
-          $project: {
-            "author.password": 0,
-            "author.email": 0,
-          },
-        },
-      ]);
-      total = await Article.countDocuments(query);
-    } else {
-      // Standard Chronological Mode
-      articles = await Article.find(query)
-        .populate("author", "name")
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit);
-      total = await Article.countDocuments(query);
+        { $match: { authorData: { $ne: [] } } },
+        { $count: "count" }
+      ];
+      const countResult = await Article.aggregate(countPipeline);
+      total = countResult[0]?.count || 0;
     }
 
     res.status(200).json({
       articles,
       total,
-      hasMore: shuffle === "true" ? true : skip + limit < total,
+      hasMore: shuffle === "true" ? (articles.length >= limit) : skip + limit < total,
     });
   } catch (err) {
     res.status(500).json(err);
