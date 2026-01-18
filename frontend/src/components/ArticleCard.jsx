@@ -2,7 +2,6 @@ import { memo, useState } from "react";
 import { HandHeart, MessageCircle } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 import { optimizeImageUrl, generateSrcSet } from "../lib/imageOptimizer";
-import { getFallbackForCategory } from "../lib/fallbackImages";
 
 function ArticleCard({ title, author, image, content, id, category, upvotes = 0, upvotedBy = [] }) {
   const navigate = useNavigate();
@@ -69,14 +68,13 @@ function ArticleCard({ title, author, image, content, id, category, upvotes = 0,
       {/* Image Container */}
       <div className="w-full aspect-16/10 bg-gray-50 overflow-hidden relative">
         <img
-          src={imgError ? getFallbackForCategory(category) : optimizedImage}
-          srcSet={imgError ? undefined : srcSet}
+          src={optimizedImage}
+          srcSet={srcSet}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           alt={title}
           loading="lazy"
           decoding="async"
-          onError={() => setImgError(true)}
-          className={`w-full h-full object-cover hover:scale-110 transition-transform duration-300 ${imgError ? 'opacity-80' : 'opacity-100'}`}
+          className="w-full h-full object-cover hover:scale-110 transition-transform duration-300 opacity-100"
           width="364"
           height="228"
         />

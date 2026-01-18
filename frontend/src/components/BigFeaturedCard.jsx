@@ -1,7 +1,6 @@
 import React, { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { optimizeImageUrl, generateSrcSet } from "../lib/imageOptimizer";
-import { getFallbackForCategory } from "../lib/fallbackImages";
 
 function BigFeaturedCard({ article }) {
   const [imgError, setImgError] = useState(false);
@@ -22,13 +21,12 @@ function BigFeaturedCard({ article }) {
     >
       <div className="aspect-16/10 bg-gray-100 overflow-hidden">
         <img
-          src={imgError ? getFallbackForCategory(article.category) : optimizedImage}
-          srcSet={imgError ? undefined : srcSet}
+          src={optimizedImage}
+          srcSet={srcSet}
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 600px"
           alt={article.title}
           loading="lazy"
           decoding="async"
-          onError={() => setImgError(true)}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
           width="600"
           height="375"

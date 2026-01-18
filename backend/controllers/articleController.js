@@ -2,7 +2,7 @@ import Article from "../models/Article.js";
 
 export const getAllArticles = async (req, res) => {
   try {
-    const limit = 9;
+    const limit = parseInt(req.query.limit) || 9;
     const skip = parseInt(req.query.skip) || 0;
     const { search, category, shuffle } = req.query;
 

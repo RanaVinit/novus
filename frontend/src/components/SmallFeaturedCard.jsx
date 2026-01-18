@@ -1,7 +1,6 @@
 import React, { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { optimizeImageUrl, generateSrcSet } from "../lib/imageOptimizer";
-import { getFallbackForCategory } from "../lib/fallbackImages";
 
 function SmallFeaturedCard({ article }) {
   const [imgError, setImgError] = useState(false);
@@ -22,13 +21,12 @@ function SmallFeaturedCard({ article }) {
       role="article"
     >
       <img
-        src={imgError ? getFallbackForCategory(article.category) : optimizedImage}
-        srcSet={imgError ? undefined : srcSet}
+        src={optimizedImage}
+        srcSet={srcSet}
         sizes="(max-width: 640px) 128px, 256px"
         alt={article.title}
         loading="lazy"
         decoding="async"
-        onError={() => setImgError(true)}
         className="w-32 h-24 object-cover rounded-xl shrink-0"
         width="128"
         height="96"
