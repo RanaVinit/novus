@@ -7,7 +7,7 @@
  */
 export const optimizeImageUrl = (imageUrl, width = 400, quality = 50) => {
   if (!imageUrl) return '';
-  
+
   if (imageUrl.includes('unsplash.com')) {
     const params = new URLSearchParams({
       w: width,
@@ -16,9 +16,10 @@ export const optimizeImageUrl = (imageUrl, width = 400, quality = 50) => {
       auto: 'format',
       dpr: '1',
     });
-    return `${imageUrl}?${params.toString()}`;
+    const connector = imageUrl.includes('?') ? '&' : '?';
+    return `${imageUrl}${connector}${params.toString()}`;
   }
-  
+
   return imageUrl;
 };
 

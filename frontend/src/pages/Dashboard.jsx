@@ -34,7 +34,7 @@ export default function Dashboard() {
                     id: article._id,
                     title: article.title,
                     content: article.content,
-                    image: article.thumbnail,
+                    image: article.thumbnail || "",
                     author: data.user.name,
                     category: article.category,
                     createdAt: article.createdAt,

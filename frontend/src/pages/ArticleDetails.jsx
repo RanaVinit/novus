@@ -3,8 +3,10 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { MetaBadge } from "../components/CategoryTag";
+import { getFallbackForCategory } from "../lib/fallbackImages";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const PLACEHOLDER_IMG = "";
 
 export default function ArticleDetails() {
   const { id } = useParams();
@@ -134,7 +136,7 @@ export default function ArticleDetails() {
       <div className="max-w-4xl mx-auto px-4">
         <img
           src={imgSrc || article.image}
-          onError={() => setImgSrc("/placeholder.jpg")}
+          onError={() => setImgSrc(getFallbackForCategory(article.category))}
           alt={article.title}
           loading="lazy"
           className="w-full h-96 object-cover rounded-2xl shadow-md mb-10"

@@ -8,7 +8,7 @@ import MediumFeaturedCard from "@/components/MediumFeaturedCard";
 import { useMemo, useState, useEffect, useRef } from "react";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
-const PLACEHOLDER_IMG = "/placeholder.jpg";
+const PLACEHOLDER_IMG = "";
 
 export default function Home() {
   const [articles, setArticles] = useState([]);
@@ -73,7 +73,7 @@ export default function Home() {
 
         const queryParams = new URLSearchParams({
           skip: skip,
-          limit: 9,
+          limit: skip === 0 ? 13 : 9,
         });
 
         if (debouncedSearch) queryParams.append("search", debouncedSearch);
@@ -135,7 +135,7 @@ export default function Home() {
 
   const handleLoadMore = () => {
     setLoadingMore(true);
-    setSkip((prev) => prev + 9);
+    setSkip(articles.length);
   };
 
   if (loading && skip === 0 && !articles.length) {
@@ -196,7 +196,7 @@ export default function Home() {
       <div className="max-w-6xl mx-auto px-4 pb-8">
         {articles.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {articles.map((a, index) => (
+            {articles.slice(4).map((a, index) => (
               <ArticleCard key={a.id} {...a} priority={index < 3} />
             ))}
           </div>
