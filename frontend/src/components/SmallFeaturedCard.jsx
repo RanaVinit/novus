@@ -1,14 +1,16 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { optimizeImageUrl, generateSrcSet } from "../lib/imageOptimizer";
+import { getFallbackForCategory } from "../lib/fallbackImages";
 
 function SmallFeaturedCard({ article }) {
+  const [imgError, setImgError] = useState(false);
   const navigate = useNavigate();
 
   if (!article) return null;
 
   const postId = article.id;
-  const image = article.image || "/placeholder.jpg";
+  const image = article.image || "";
 
   const optimizedImage = optimizeImageUrl(image, 256, 60);
   const srcSet = generateSrcSet(image, false);
@@ -20,12 +22,13 @@ function SmallFeaturedCard({ article }) {
       role="article"
     >
       <img
-        src={optimizedImage}
-        srcSet={srcSet}
+        src={imgError ? getFallbackForCategory(article.category) : optimizedImage}
+        srcSet={imgError ? undefined : srcSet}
         sizes="(max-width: 640px) 128px, 256px"
         alt={article.title}
         loading="lazy"
         decoding="async"
+        onError={() => setImgError(true)}
         className="w-32 h-24 object-cover rounded-xl shrink-0"
         width="128"
         height="96"

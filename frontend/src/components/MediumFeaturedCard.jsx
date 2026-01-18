@@ -1,14 +1,16 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { optimizeImageUrl, generateSrcSet } from "../lib/imageOptimizer";
+import { getFallbackForCategory } from "../lib/fallbackImages";
 
 function MediumFeaturedCard({ article }) {
+  const [imgError, setImgError] = useState(false);
   const navigate = useNavigate();
 
   if (!article) return null;
 
   const postId = article.id;
-  const image = article.image || "/placeholder.jpg";
+  const image = article.image || "";
 
   const optimizedImage = optimizeImageUrl(image, 500, 60);
   const srcSet = generateSrcSet(image, false);
@@ -21,12 +23,13 @@ function MediumFeaturedCard({ article }) {
     >
       <div className="h-32 bg-gray-100 overflow-hidden">
         <img
-          src={optimizedImage}
-          srcSet={srcSet}
+          src={imgError ? getFallbackForCategory(article.category) : optimizedImage}
+          srcSet={imgError ? undefined : srcSet}
           sizes="(max-width: 768px) 100vw, 500px"
           alt={article.title}
           loading="lazy"
           decoding="async"
+          onError={() => setImgError(true)}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
           width="500"
           height="280"

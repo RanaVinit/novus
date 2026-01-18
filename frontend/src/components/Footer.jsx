@@ -71,7 +71,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-gray-400 text-sm">
-            © 2025 Novus. All rights reserved.
+            © 2026 Novus. All rights reserved.
           </p>
           <div className="flex items-center gap-6 text-sm text-gray-400">
             <a href="#" className="hover:text-gray-600 transition-colors">Privacy Policy</a>

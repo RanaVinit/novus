@@ -2,15 +2,16 @@ import { memo, useState } from "react";
 import { HandHeart, MessageCircle } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 import { optimizeImageUrl, generateSrcSet } from "../lib/imageOptimizer";
+import { getFallbackForCategory } from "../lib/fallbackImages";
 
-function ArticleCard({ title, author, image, content, id, upvotes = 0, upvotedBy = [] }) {
+function ArticleCard({ title, author, image, content, id, category, upvotes = 0, upvotedBy = [] }) {
   const navigate = useNavigate();
   const currentUserId = localStorage.getItem("userId");
   const [likes, setLikes] = useState(upvotes);
   const [isLiked, setIsLiked] = useState(upvotedBy?.includes(currentUserId) || false);
 
   const authorName = typeof author === "string" ? author : author?.name;
-  const safeImage = image || "/placeholder.jpg";
+  const safeImage = image || "";
 
   const handleCardClick = () => {
     if (id) {
@@ -27,9 +28,10 @@ function ArticleCard({ title, author, image, content, id, upvotes = 0, upvotedBy
     }
 
     const endpoint = isLiked ? "downvote" : "upvote";
+    const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/articles/${id}/${endpoint}`, {
+      const res = await fetch(`${API_BASE}/api/articles/${id}/${endpoint}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -65,26 +67,19 @@ function ArticleCard({ title, author, image, content, id, upvotes = 0, upvotedBy
       role="article"
     >
       {/* Image Container */}
-      <div className="w-full aspect-16/10 bg-gray-100 overflow-hidden relative">
-        {(!safeImage || imgError) ? (
-          <div className="w-full h-full flex flex-col items-center justify-center bg-linear-to-br from-gray-50 to-gray-200 text-gray-400 gap-2">
-            <HandHeart size={32} className="opacity-20" />
-            <span className="text-[10px] font-bold uppercase tracking-widest opacity-40">Novus Reader</span>
-          </div>
-        ) : (
-          <img
-            src={optimizedImage}
-            srcSet={srcSet}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            alt={title}
-            loading="lazy"
-            decoding="async"
-            onError={() => setImgError(true)}
-            className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-            width="364"
-            height="228"
-          />
-        )}
+      <div className="w-full aspect-16/10 bg-gray-50 overflow-hidden relative">
+        <img
+          src={imgError ? getFallbackForCategory(category) : optimizedImage}
+          srcSet={imgError ? undefined : srcSet}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          alt={title}
+          loading="lazy"
+          decoding="async"
+          onError={() => setImgError(true)}
+          className={`w-full h-full object-cover hover:scale-110 transition-transform duration-300 ${imgError ? 'opacity-80' : 'opacity-100'}`}
+          width="364"
+          height="228"
+        />
       </div>
 
       {/* Content Section */}
