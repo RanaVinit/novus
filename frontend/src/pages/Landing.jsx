@@ -2,9 +2,14 @@ import Navbar from "@/components/Navbar";
 import AuthModal from "@/components/AuthModal";
 import { ArrowRight, User } from "lucide-react";
 import { useState } from "react";
+import { Navigate } from "react-router-dom";
 
 export default function Landing() {
     const [authType, setAuthType] = useState(null);
+
+    if (localStorage.getItem("token")) {
+        return <Navigate to="/home" replace />;
+    }
 
     return (
         <div className="min-h-screen font-sans text-gray-900 selection:bg-gray-900 selection:text-white overflow-hidden flex flex-col">
