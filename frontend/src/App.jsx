@@ -7,6 +7,7 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const PublicProfile = lazy(() => import("./pages/PublicProfile"));
 const ArticleDetails = lazy(() => import("./pages/ArticleDetails"));
 const CreateArticle = lazy(() => import("./pages/CreateArticle"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/profile/:id" element={<PublicProfile />} />
         <Route path="/article/:id" element={<ArticleDetails />} />
         <Route path="/create-article" element={<CreateArticle />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );
