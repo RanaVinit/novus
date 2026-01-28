@@ -1,7 +1,50 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Twitter, Instagram, Linkedin, Github, Mail } from "lucide-react";
+import { Twitter, Instagram, Linkedin, Github, Mail, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export default function Footer() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState("idle"); // idle, loading, success, error
+  const [message, setMessage] = useState("");
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email) return;
+
+    setStatus("loading");
+    setMessage("");
+
+    try {
+      const res = await fetch(`${API_BASE}/api/subscribe`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Something went wrong. Please try again.");
+      }
+
+      setStatus("success");
+      setMessage(data.message || "Thank you for subscribing!");
+      setEmail("");
+
+      // Reset status after 5 seconds
+      setTimeout(() => {
+        setStatus("idle");
+        setMessage("");
+      }, 5000);
+
+    } catch (error) {
+      setStatus("error");
+      setMessage(error.message);
+    }
+  };
+
   return (
     <footer className="w-full bg-white border-t border-gray-100 pt-16 pb-8">
       <div className="max-w-6xl mx-auto px-6">
@@ -49,22 +92,46 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Newsletter / Contact */}
+          {/* Newsletter */}
           <div>
             <h4 className="font-bold text-gray-900 mb-6">Stay Connected</h4>
             <p className="text-gray-500 text-sm mb-4">
               Join our newsletter for the latest stories and updates.
             </p>
-            <div className="flex gap-2">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm w-full focus:outline-none focus:border-black transition-colors"
-              />
-              <button className="bg-black text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors">
-                Subscribe
-              </button>
-            </div>
+            <form onSubmit={handleSubscribe} className="space-y-3">
+              <div className="flex gap-2">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  required
+                  disabled={status === "loading"}
+                  className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm w-full focus:outline-none focus:border-black transition-colors disabled:opacity-50"
+                />
+                <button
+                  type="submit"
+                  disabled={status === "loading"}
+                  className="bg-black text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center gap-2"
+                >
+                  {status === "loading" ? <Loader2 size={16} className="animate-spin" /> : "Subscribe"}
+                </button>
+              </div>
+
+              {status === "success" && (
+                <div className="flex items-center gap-2 text-green-600 text-xs animate-fade-in">
+                  <CheckCircle2 size={14} />
+                  <span>{message}</span>
+                </div>
+              )}
+
+              {status === "error" && (
+                <div className="flex items-center gap-2 text-red-600 text-xs animate-fade-in">
+                  <AlertCircle size={14} />
+                  <span>{message}</span>
+                </div>
+              )}
+            </form>
           </div>
         </div>
 

@@ -5,6 +5,7 @@ import authRoutes from "./routes/auth.js";
 import cors from "cors";
 import articleRoutes from "./routes/article.js";
 import userRoutes from "./routes/user.js";
+import subscriberRoutes from "./routes/subscribe.js";
 
 // Load the environment variables from .env file.
 dotenv.config();
@@ -21,6 +22,7 @@ app.use(cors({
 app.use("/api/auth", authRoutes);
 app.use("/api/articles", articleRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/subscribe", subscriberRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
