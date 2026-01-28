@@ -22,8 +22,6 @@ export const getAllArticles = async (req, res) => {
     let articles;
     let total;
 
-    // We use aggregation to ensure we only get articles with valid authors
-    // This prevents "disappearing" articles caused by orphaned data
     const pipeline = [
       { $match: query },
       {
@@ -46,7 +44,6 @@ export const getAllArticles = async (req, res) => {
     if (shuffle === "true" && !search) {
       pipeline.push({ $sample: { size: limit } });
       articles = await Article.aggregate(pipeline);
-      // For shuffle, total is still useful for hasMore logic
       total = await Article.countDocuments(query);
     } else {
       pipeline.push({ $sort: { createdAt: -1 } });

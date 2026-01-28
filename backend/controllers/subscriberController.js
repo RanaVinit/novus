@@ -1,4 +1,5 @@
 import Subscriber from "../models/Subscriber.js";
+import { sendWelcomeEmail } from "../services/mailService.js";
 
 /**
  * @desc    Subscribe to newsletter
@@ -22,6 +23,8 @@ export const subscribe = async (req, res) => {
         // else create new
         const newSubscriber = new Subscriber({ email });
         await newSubscriber.save();
+
+        sendWelcomeEmail(email).catch((err) => console.error("Failed to send welcome email:", err));
 
         res.status(201).json({ message: "Successfully subscribed to the newsletter!" });
     } catch (error) {
