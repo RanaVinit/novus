@@ -23,10 +23,18 @@ export default function Footer() {
         body: JSON.stringify({ email }),
       });
 
-      const data = await res.json();
+      const contentType = res.headers.get("content-type");
+      let data = {};
+
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        // Handle 404 HTML page from a server
+        throw new Error("Server error: Received unexpected response format.");
+      }
 
       if (!res.ok) {
-        throw new Error(data.message || "Something went wrong. Please try again.");
+        throw new Error(data.message || `Error: ${res.status} ${res.statusText}`);
       }
 
       setStatus("success");
