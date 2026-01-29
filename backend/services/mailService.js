@@ -4,16 +4,23 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT || "587"),
-    secure: process.env.SMTP_PORT == 465, // true for 465, false for other ports
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    pool: true,
     auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
     },
+    connectionTimeout: 60000,
+    greetingTimeout: 60000,
+    socketTimeout: 60000,
+    logger: true,
+    debug: true,
 });
 
 // Verify connection configuration
+/* 
 transporter.verify((error, success) => {
     if (error) {
         console.error("SMTP Connection Error:", error);
@@ -21,6 +28,7 @@ transporter.verify((error, success) => {
         console.log("SMTP Server is ready to take our messages");
     }
 });
+*/
 
 /**
  * Send an email
