@@ -25,5 +25,8 @@
     "nodemailer": "^7.0.13"
   },
   "type": "module",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
 }
