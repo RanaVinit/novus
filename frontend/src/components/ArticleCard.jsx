@@ -1,5 +1,5 @@
 import { memo, useState } from "react";
-import { HandHeart, MessageCircle } from 'lucide-react';
+import { HandHeart } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 import { optimizeImageUrl, generateSrcSet } from "../lib/imageOptimizer";
 
@@ -46,13 +46,6 @@ function ArticleCard({ title, author, image, content, id, category, upvotes = 0,
     } catch (err) {
       console.error("failed to update like", err);
     }
-  };
-
-  const [comments, setComments] = useState(0);
-
-  const handleComment = (e) => {
-    e.stopPropagation();
-    setComments(prev => prev + 1);
   };
 
   const optimizedImage = optimizeImageUrl(safeImage, 364, 60);
@@ -123,14 +116,7 @@ function ArticleCard({ title, author, image, content, id, category, upvotes = 0,
               <span className={`text-xs font-medium ${isLiked ? "text-black" : "text-gray-600"}`}>{likes}</span>
             </button>
 
-            <button
-              onClick={handleComment}
-              className="inline-flex items-center gap-1.5 px-2 py-1 rounded hover:bg-blue-50 transition-colors duration-150"
-              aria-label="Comment on this article"
-            >
-              <MessageCircle size={16} className="text-gray-500 hover:text-blue-500" />
-              <span className="text-xs text-gray-600 font-medium">{comments}</span>
-            </button>
+
           </div>
         </div>
 

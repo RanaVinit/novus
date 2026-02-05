@@ -1,111 +1,167 @@
-# Novus
+# Novus - Modern Storytelling Platform
 
-Novus is a robust content platform designed for modern storytelling. It allows users to share high-quality articles with an emphasis on visual reliability and performance through Cloudinary integration.
+[![MERN Stack](https://img.shields.io/badge/Stack-MERN-blue?style=for-the-badge)](https://www.mongodb.com/mern-stack)
+[![Cloudinary](https://img.shields.io/badge/Image-Cloudinary-orange?style=for-the-badge)](https://cloudinary.com)
+[![JWT](https://img.shields.io/badge/Auth-JWT-black?style=for-the-badge)](https://jwt.io)
 
-## Overview
-Novus enables users to share their expertise through beautifully crafted articles. Built with modern web technologies, it offers a seamless writing and reading experience with features like real-time article updates, user authentication, and social interactions.
+**Novus** is a production-ready content platform designed for modern storytelling. Built with the MERN stack, it prioritizes security, performance, and a seamless developer experience.
 
-## Key Features
+---
 
-### 1. Secure Authentication System
-- JWT-based authentication
-- Protected routes for content management
-- Secure password hashing with bcrypt
-- Client-side session management
+## System Architecture
 
-### 2. Article Management
-- Create, Read, Update, and Delete (CRUD) articles
-- Image management powered by Cloudinary (Auto-upload & Optimization)
-- Upvoting system for community engagement
-- Search functionality based on titles and categories
+Novus follows a decoupled Client-Server architecture with centralized state management and cloud integration.
 
-### 3. User Features
-- Custom user profiles and portfolios
-- Bio and account management
-- Public profile views for discoverability
+```mermaid
+graph TD
+    User([User / Browser])
+    subgraph "Frontend (React + Vite)"
+        UI[Tailwind UI]
+        State[React Hooks/Context]
+        Axios[API Client]
+    end
+    subgraph "Backend (Express + Node)"
+        Router[API Router]
+        Auth[JWT Authentication]
+        Controllers[Business Logic]
+        Error[Global Error Handler]
+    end
+    Cloudinary[Cloudinary CDN]
+    DB[(MongoDB Atlas)]
 
-### 4. Modern UI/UX
-- Responsive design for mobile and desktop
-- Intuitive navigation with Tailwind CSS
-- Real-time loading states and optimized image delivery
+    User <--> UI
+    UI <--> State
+    State <--> Axios
+    Axios <--> Router
+    Router <--> Auth
+    Auth <--> Controllers
+    Controllers <--> DB
+    Controllers <--> Cloudinary
+    Error -.-> User
+```
+
+---
+
+## Authentication Flow
+
+Secure implementation of Stateless Authentication using JSON Web Tokens (JWT).
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Backend
+    participant DB
+
+    User->>Frontend: Enter Credentials
+    Frontend->>Backend: POST /api/auth/login
+    Backend->>DB: Verify User
+    DB-->>Backend: User Found
+    Backend->>Backend: Sign JWT (Secret key)
+    Backend-->>Frontend: HTTP 200 + JWT Token
+    Frontend->>Frontend: Store Token in LocalStorage
+    Note over User,DB: Subsequent Requests
+    Frontend->>Backend: Authorization: Bearer <token>
+    Backend->>Backend: Verify Signature
+    Backend-->>Frontend: Dynamic Data
+```
+
+---
+
+## Data Model (ERD)
+
+Optimized MongoDB schemas designed for high performance and scalability.
+
+```mermaid
+erDiagram
+    USER ||--o{ ARTICLE : authors
+    USER {
+        string _id
+        string username
+        string email
+        string password
+        string bio
+        string profileImage
+    }
+    ARTICLE {
+        string _id
+        string title
+        string content
+        string category
+        string coverImage
+        objectId author
+        array upvotes
+        date createdAt
+    }
+    SUBSCRIBER {
+        string _id
+        string email
+    }
+```
+
+---
+
+## Key Features & Interview Talking Points
+
+### 1. **Stateless Security**
+- **JWT & Bcrypt**: Stateless authentication and password hashing.
+- **Production Middleware**: Integrated `Helmet` for secure headers and `express-rate-limit` to prevent Brute-Force/DDoS attacks.
+
+### 2. **Cloud-Native Media**
+- **Cloudinary Integration**: Direct-to-cloud image uploads with server-side validation, ensuring the database only stores optimized CDN URLs.
+
+### 3. **Developer Experience (DX)**
+- **Centralized Error Handling**: A global middleware captures all asynchronous errors, preventing server crashes and returning clean, consistent JSON responses.
+
+### 4. **Modern Frontend Architecture**
+- **React 19 Hooks**: Utilizing the latest React features for efficient state management.
+- **Code Splitting**: implemented `React.lazy` and `Suspense` for faster initial page loads and reduced bundle sizes.
+
+---
 
 ## Tech Stack
 
-### Frontend
-- **React 19** - UI library
-- **React Router 7** - Navigation
-- **Tailwind CSS 4** - Modern styling
-- **Vite** - High-performance build tool
+- **Frontend**: React 19, Tailwind CSS 4, Vite, Axios, Lucide React.
+- **Backend**: Node.js, Express.js (v5), MongoDB (Mongoose), JWT, Cloudinary.
+- **Security**: Helmet, Express Rate Limit, Bcrypt, CORS Hardening.
+- **Optimization**: Compression (Gzip/Brotli), Code Splitting.
 
-### Backend
-- **Node.js** - Runtime environment
-- **Express.js** - Web framework
-- **MongoDB & Mongoose** - Database & ODM
-- **Cloudinary** - Image hosting and transformation
-- **JWT & bcrypt** - Security and authentication
+---
 
-## Prerequisites
+## Getting Started
+
+### Prerequisites
 - Node.js >= 18.x
-- npm >= 9.x
-- MongoDB (Local or Atlas)
+- MongoDB (Running locally or via Atlas)
 
-## Quick Start
+### Setup
+1. **Clone the Repo**
+   ```bash
+   git clone https://github.com/RanaVinit/novus.git
+   ```
+2. **Backend Configuration**
+   ```bash
+   cd backend
+   cp .env.example .env
+   npm install
+   npm run dev
+   ```
+3. **Frontend Configuration**
+   ```bash
+   cd ../frontend
+   npm install
+   npm run dev
+   ```
 
-### 1. Clone & Install
-```bash
-# Clone the repository
-git clone https://github.com/RanaVinit/novus.git
+---
 
-# Install dependencies (Root, Backend, and Frontend)
-npm install
-cd backend && npm install
-cd ../frontend && npm install
-```
+## Roadmap & Future Enhancements
+- [ ] **Unit & Integration Testing**: Implementing Jest and Supertest.
+- [ ] **Caching Layer**: Integrating Redis for high-traffic article feeds.
+- [ ] **Social Features**: Commenting system and real-time notifications.
+- [ ] **CI/CD**: GitHub Actions for automated deployment and quality checks.
 
-### 2. Environment Setup
-Create a `.env` file in the `backend/` directory with the following:
-```env
-PORT=5000
-MONGO_URL=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
-```
+---
 
-### 3. Development
-```bash
-# Terminal 1 - Backend
-cd backend
-npm run dev
-
-# Terminal 2 - Frontend
-cd frontend
-npm run dev
-```
-Visit `http://localhost:5173` to see the app in action.
-
-## Project Structure
-```text
-novus/
-├── backend/                # Backend API (Express)
-│   ├── config/            # DB Configuration
-│   ├── controllers/       # Business Logic
-│   ├── middleware/        # Auth & Security
-│   ├── models/           # Data Schemas
-│   ├── routes/           # API Endpoints
-│   └── scripts/          # Seeding & Migration tools
-└── frontend/             # Frontend UI (React)
-    ├── public/           # Static assets
-    └── src/
-        ├── components/   # UI Components
-        ├── lib/          # Utilities (Image optimization, etc.)
-        ├── pages/        # View Components
-        └── App.jsx       # Routing & App Root
-```
-
-## Acknowledgments
-- React Documentation
-- Tailwind CSS
-- MongoDB & Mongoose
-- Cloudinary SDK
+## License
+ISC License. Feel free to use this project for learning or as a foundation for your own platform!
