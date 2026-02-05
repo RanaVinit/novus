@@ -1,6 +1,6 @@
-import { SquarePen } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
-import React, { memo } from "react";
+import { SquarePen, LogOut, LayoutDashboard, User, ChevronDown } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { memo, useState, useRef, useEffect } from "react";
 import SearchBar from "./SearchBar";
 
 function Navbar({
@@ -11,15 +11,40 @@ function Navbar({
   onSearch,
   searchValue,
 }) {
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+
   const loggedIn =
     typeof isLoggedIn === "boolean"
       ? isLoggedIn
       : Boolean(localStorage.getItem("token"));
+
   const handleLoginClick = () => {
     if (typeof onLoginClick === "function") onLoginClick();
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setShowDropdown(false);
+    navigate("/");
+    window.location.reload();
+  };
+
   const { pathname } = useLocation();
   const isHome = pathname === "/home";
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <nav className="w-full border-b border-gray-100 bg-white px-6 py-3 flex items-center gap-6 fixed top-0 left-0 z-50 transition-all duration-300">
 
@@ -74,15 +99,40 @@ function Navbar({
           </button>
         )}
 
-        {/* Avatar placeholder for logged-in users */}
+        {/* Profile Dropdown for logged-in users */}
         {loggedIn && !showPublish && (
-          <Link to="/dashboard">
-            <img
-              src="https://i.pravatar.cc/40"
-              className="w-9 h-9 rounded-full cursor-pointer hover:ring-2 hover:ring-gray-200 transition"
-              alt="profile"
-            />
-          </Link>
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setShowDropdown(!showDropdown)}
+              className="flex items-center gap-1 p-0.5 rounded-full hover:bg-gray-50 transition border border-gray-100"
+            >
+              <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100 shadow-sm">
+                <User className="w-4 h-4 text-gray-600" />
+              </div>
+              <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${showDropdown ? "rotate-180" : ""}`} />
+            </button>
+
+            {showDropdown && (
+              <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-2xl shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                <Link
+                  to="/dashboard"
+                  onClick={() => setShowDropdown(false)}
+                  className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition"
+                >
+                  <LayoutDashboard className="w-4 h-4" />
+                  Dashboard
+                </Link>
+                <div className="border-t border-gray-100 my-1"></div>
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
         )}
       </div>
     </nav>
