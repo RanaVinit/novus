@@ -29,6 +29,14 @@ const articleSchema = new mongoose.Schema({
     required: true,
   },
   tags: [String],
+  summary: {
+    type: String,
+    default: "",
+  },
+  aiTags: {
+    type: [String],
+    default: [],
+  },
   upvotes: {
     type: Number,
     default: 0,
