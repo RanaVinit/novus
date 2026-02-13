@@ -1,17 +1,19 @@
 import Article from "../models/Article.js";
+import { analyzeArticle } from "../services/aiService.js";
 
 export const getAllArticles = async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit) || 9;
+    const limit = Math.min(parseInt(req.query.limit) || 9, 50);
     const skip = parseInt(req.query.skip) || 0;
     const { search, category, shuffle } = req.query;
 
     const query = {};
 
     if (search) {
+      const safeSearch = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       query.$or = [
-        { title: { $regex: search, $options: "i" } },
-        { content: { $regex: search, $options: "i" } },
+        { title: { $regex: safeSearch, $options: "i" } },
+        { content: { $regex: safeSearch, $options: "i" } },
       ];
     }
 
@@ -96,9 +98,15 @@ export const getArticleById = async (req, res) => {
 
 export const createArticle = async (req, res) => {
   try {
+    const { title, content } = req.body;
+
+    const { summary, aiTags } = await analyzeArticle(title, content);
+
     const article = new Article({
       ...req.body,
       author: req.user.userId,
+      summary,
+      aiTags,
     });
 
     await article.save();

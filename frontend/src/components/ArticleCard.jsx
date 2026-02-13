@@ -10,7 +10,8 @@ function ArticleCard({ title, author, image, content, id, category, upvotes = 0,
   const [isLiked, setIsLiked] = useState(upvotedBy?.includes(currentUserId) || false);
 
   const authorName = typeof author === "string" ? author : author?.name;
-  const safeImage = image || "";
+  const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?q=80&w=1000&auto=format&fit=crop";
+  const safeImage = image && image !== "/placeholder.jpg" ? image : FALLBACK_IMAGE;
 
   const handleCardClick = () => {
     if (id) {

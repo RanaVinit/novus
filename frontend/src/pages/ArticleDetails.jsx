@@ -3,9 +3,9 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { MetaBadge } from "../components/CategoryTag";
+import { Sparkles } from "lucide-react";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
-const PLACEHOLDER_IMG = "";
 
 export default function ArticleDetails() {
   const { id } = useParams();
@@ -13,7 +13,6 @@ export default function ArticleDetails() {
 
   const [article, setArticle] = useState(null);
   const [related, setRelated] = useState([]);
-  const [imgSrc, setImgSrc] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -50,6 +49,8 @@ export default function ArticleDetails() {
               : data.author,
           category: data.category,
           createdAt: data.createdAt,
+          summary: data.summary || "",
+          aiTags: data.aiTags || [],
         };
         setArticle(normalized);
       } catch (err) {
@@ -134,10 +135,10 @@ export default function ArticleDetails() {
 
       <div className="max-w-4xl mx-auto px-4">
         <img
-          src={article.image}
+          src={article.image === "/placeholder.jpg" || !article.image ? "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?q=80&w=1000&auto=format&fit=crop" : article.image}
           alt={article.title}
           loading="lazy"
-          className="w-full h-96 object-cover rounded-2xl shadow-md mb-10"
+          className="w-full h-96 object-cover rounded-2xl shadow-sm mb-10 bg-gray-100"
         />
 
         <h1 className="text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-4">
@@ -155,9 +156,32 @@ export default function ArticleDetails() {
           {displayDate && <MetaBadge text={displayDate} />}
         </div>
 
+        {article.summary && (
+          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 mb-10">
+            <div className="flex items-center gap-2 text-sm font-semibold text-gray-500 mb-2">
+              <Sparkles size={16} />
+              <span>AI-Generated Summary</span>
+            </div>
+            <p className="text-gray-700 leading-relaxed">{article.summary}</p>
+          </div>
+        )}
+
         <article className="text-lg text-gray-800 leading-relaxed space-y-6">
           {article.content}
         </article>
+
+        {article.aiTags?.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-8">
+            {article.aiTags.map((tag, i) => (
+              <span
+                key={i}
+                className="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full border border-gray-200"
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
 
         <div className="max-w-4xl mx-auto px-4 mt-16">
           <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
