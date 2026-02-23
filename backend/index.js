@@ -36,6 +36,10 @@ app.use("/api/articles", articleRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/subscribe", subscriberRoutes);
 
+app.get("/api/health", (req, res) => {
+  res.json({ message: "Server is running" });
+});
+
 app.use(errorMiddleware);
 
 app.listen(port, () => {
